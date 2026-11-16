@@ -10,7 +10,7 @@
 (function(){
 "use strict";
 var BASE="https://rqzqudoiqlqjpzvmvlwq.supabase.co", KEY="sb_publishable_kjnfYZwCw5guEnFuucq5Qg_9N4WYcrM";
-var access="",refresh="",expiry=0,items=[],current=0,lastActivity=new Date().getTime(),lastCount=-1,lastGalleryRender=0,mode="slideshow",activeVideo=null,loading=false;
+var access="",refresh="",expiry=0,items=[],current=0,lastActivity=new Date().getTime(),lastCount=-1,lastGalleryRender=0,mode="slideshow",activeVideo=null,loading=false,signedCache={},signing={},loadedCache={},showSequence=0,galleryDirty=true;
 function el(id){return document.getElementById(id)}
 function visible(id,yes){el(id).style.display=yes?"block":"none"}
 function text(id,s){el(id).textContent=s||""}
@@ -31,18 +31,76 @@ function reload(){if(loading)return;loading=true;authReady(function(ok){if(!ok){
 request("GET","/rest/v1/souvenirs?select=id%2Ctype_media%2Cfichier_path%2Cprenom%2Cmessage%2Ccreated_at&order=created_at.desc&limit=200",null,true,function(code,data){loading=false;if(code!==200||!data||!data.length&&code!==200){text("status","Connexion difficile. Nouvel essai bientôt.");return}
 var oldFirst=items.length?items[0].id:"",same=items.length===data.length&&oldFirst===(data.length?data[0].id:"");items=data;
 if(lastCount>=0&&data.length>lastCount&&oldFirst!==data[0].id){visible("badge",true);setTimeout(function(){visible("badge",false)},7000)}
-lastCount=data.length;if(!same||new Date().getTime()-lastGalleryRender>1800000){renderGallery();lastGalleryRender=new Date().getTime()}if(!same||!el("photo").getAttribute("src"))showPhoto(current);
+lastCount=data.length;if(!same){galleryDirty=true}if(!same||!el("photo").getAttribute("src"))showPhoto(current);
 if(!items.length){text("empty","Les premiers souvenirs arrivent bientôt ❤️");visible("empty",true)}
 })})})}
-function signed(path,done){authReady(function(ok){if(!ok){done(null);return}var safe=path.split("/").map(function(s){return encodeURIComponent(s)}).join("/");request("POST","/storage/v1/object/sign/souvenirs-famille/"+safe,{expiresIn:3600},true,function(code,r){if(code===200&&r&&r.signedURL){var u=r.signedURL;done(u.indexOf("http")===0?u:BASE+"/storage/v1"+u)}else done(null)})})}
-function showPhoto(index){if(!items.length)return;var attempts=0;while(attempts<items.length&&items[index%items.length].type_media!=="photo"){index++;attempts++}if(attempts>=items.length){visible("photo",false);visible("empty",true);text("empty","Les vidéos sont disponibles dans la galerie ❤️");return}current=index%items.length;var item=items[current];signed(item.fichier_path,function(src){if(!src)return;el("photo").src=src;visible("photo",true);visible("empty",false);text("info",item.prenom+(item.message?" — "+item.message:""))})}
+// Cache the signed URL while it is valid; avoid an extra network request on every slide.
+function signed(path,done){
+ var cached=signedCache[path],now=new Date().getTime();
+ if(cached&&cached.until>now){done(cached.url);return}
+ if(signing[path]){signing[path].push(done);return}
+ signing[path]=[done];
+ authReady(function(ok){if(!ok){finish(null);return}
+ var safe=path.split("/").map(function(s){return encodeURIComponent(s)}).join("/");
+ request("POST","/storage/v1/object/sign/souvenirs-famille/"+safe,{expiresIn:3600},true,function(code,r){
+  var u=null;
+  if(code===200&&r&&r.signedURL){u=r.signedURL.indexOf("http")===0?r.signedURL:BASE+"/storage/v1"+r.signedURL;signedCache[path]={url:u,until:new Date().getTime()+3000000}}
+  finish(u)
+ });
+ });
+ function finish(url){var callbacks=signing[path]||[];delete signing[path];for(var j=0;j<callbacks.length;j++)callbacks[j](url)}
+}
+function nextPhotoIndex(index){
+ if(!items.length)return -1;
+ for(var j=1;j<=items.length;j++){var k=(index+j)%items.length;if(items[k].type_media==="photo")return k}
+ return -1
+}
+function preloadNext(index){
+ if(items.length<2)return;
+ var next=nextPhotoIndex(index);
+ if(next<0||next===index)return;
+ var path=items[next].fichier_path;
+ if(loadedCache[path])return;
+ signed(path,function(src){
+  if(!src||loadedCache[path])return;
+  var pre=new Image();loadedCache[path]=pre;
+  pre.onload=function(){loadedCache[path]=pre};
+  pre.onerror=function(){delete loadedCache[path]};
+  pre.src=src;
+  // Old iPads have limited memory: keep only the current and next preloaded image.
+  for(var key in loadedCache){if(loadedCache.hasOwnProperty(key)&&key!==path&&key!==items[index].fichier_path)delete loadedCache[key]}
+ })
+}
+function showPhoto(index){
+ if(!items.length)return;
+ var attempts=0;
+ while(attempts<items.length&&items[index%items.length].type_media!=="photo"){index++;attempts++}
+ if(attempts>=items.length){visible("photo",false);visible("empty",true);text("empty","Les vidéos sont disponibles dans la galerie ❤️");return}
+ current=index%items.length;
+ var item=items[current],sequence=++showSequence;
+ signed(item.fichier_path,function(src){
+  if(!src||sequence!==showSequence)return;
+  var photo=el("photo");
+  if(photo.getAttribute("src")===src&&photo.complete){visible("photo",true);visible("empty",false);preloadNext(current);return}
+  // Keep the previous image visible until the new image has fully loaded.
+  var picture=new Image();
+  picture.onload=function(){
+   if(sequence!==showSequence)return;
+   photo.src=src;visible("photo",true);visible("empty",false);
+   text("info",item.prenom+(item.message?" — "+item.message:""));
+   preloadNext(current)
+  };
+  picture.onerror=function(){if(sequence===showSequence)text("status","Chargement de la photo impossible.")};
+  picture.src=src
+ })
+}
 function advance(){if(mode!=="slideshow")return;showPhoto((current+1)%Math.max(items.length,1))}
-function renderGallery(){var grid=el("grid");while(grid.firstChild)grid.removeChild(grid.firstChild);for(var i=0;i<items.length;i++){(function(item){var tile=document.createElement("div");tile.className="tile";var img=document.createElement("img");img.alt="Souvenir";tile.appendChild(img);if(item.type_media==="video"){var p=document.createElement("div");p.className="play";p.textContent="▶";tile.appendChild(p)}
+function renderGallery(){galleryDirty=false;lastGalleryRender=new Date().getTime();var grid=el("grid");while(grid.firstChild)grid.removeChild(grid.firstChild);for(var i=0;i<items.length&&i<24;i++){(function(item){var tile=document.createElement("div");tile.className="tile";var img=document.createElement("img");img.alt="Souvenir";tile.appendChild(img);if(item.type_media==="video"){var p=document.createElement("div");p.className="play";p.textContent="▶";tile.appendChild(p)}
 var label=document.createElement("div");label.className="label";label.textContent=item.prenom+" · "+(item.type_media==="video"?"Vidéo":"Photo");tile.appendChild(label);tile.onclick=function(){openItem(item)};grid.appendChild(tile);if(item.type_media==="photo"){signed(item.fichier_path,function(u){if(u)img.src=u})}else{img.style.background="#8c6d67"}})(items[i])}}
 function openItem(item){mode="viewer";activeVideo=null;text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else node.alt="Souvenir";c.appendChild(node)})}
 function closeAll(){if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
 function touch(){lastActivity=new Date().getTime()}
-el("openGallery").onclick=function(){touch();mode="gallery";visible("gallery",true)};
+el("openGallery").onclick=function(){touch();mode="gallery";visible("gallery",true);if(galleryDirty||new Date().getTime()-lastGalleryRender>1800000)renderGallery()};
 el("closeGallery").onclick=function(){touch();closeAll()};
 el("closeViewer").onclick=function(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;mode="gallery";visible("viewer",false)};
 el("sleep").onclick=function(){touch();mode="sleep";visible("dark",true)};
