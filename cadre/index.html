@@ -226,8 +226,7 @@ el("noticeSee").onclick=function(){
  touch();visible("badge",false);
  var selected=latestNewItem;latestNewItem=null;
  if(!selected)return;
- mode="gallery";visible("gallery",true);
- if(galleryDirty||new Date().getTime()-lastGalleryRender>1800000)renderGallery();
+ showGallery();
  openItem(selected)
 };
 el("photo").onclick=function(){touch();manualUntil=new Date().getTime()+30000;visible("reactPanel",el("reactPanel").style.display!=="block")};
