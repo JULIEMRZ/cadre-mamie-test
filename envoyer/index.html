@@ -27,10 +27,25 @@ $("acceptForm").onsubmit=async function(e){e.preventDefault();var r=await db.aut
 $("logout").onclick=async function(){await db.auth.signOut();refresh()};
 $("media").onchange=function(){var f=this.files[0];$("preview").innerHTML="";if(f&&f.type.indexOf("image/")===0){var img=document.createElement("img");img.className="preview";img.src=URL.createObjectURL(f);$("preview").appendChild(img)}};
 function randomName(){return Date.now()+"-"+Math.random().toString(36).slice(2,12)}
+// Resize new photos for the 2012 iPad: keep original video uploads unchanged.
+// Keeps aspect ratio, and falls back to the original when a browser cannot compress.
+async function optimizePhoto(file){
+ if(file.type==="video/mp4")return {blob:file,type:file.type,extension:file.name.split(".").pop().toLowerCase()};
+ try{
+  var image=await new Promise(function(resolve,reject){var im=new Image();im.onload=function(){resolve(im)};im.onerror=reject;im.src=URL.createObjectURL(file)});
+  var maxDim=1600,ratio=Math.min(1,maxDim/Math.max(image.naturalWidth||image.width,image.naturalHeight||image.height));
+  var canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round((image.naturalWidth||image.width)*ratio));canvas.height=Math.max(1,Math.round((image.naturalHeight||image.height)*ratio));
+  canvas.getContext("2d").drawImage(image,0,0,canvas.width,canvas.height);
+  var blob=await new Promise(function(resolve){canvas.toBlob(resolve,"image/jpeg",0.83)});
+  if(blob&&blob.size<file.size)return {blob:blob,type:"image/jpeg",extension:"jpg"};
+ }catch(err){}
+ return {blob:file,type:file.type,extension:file.name.split(".").pop().toLowerCase()}
+}
+
 $("uploadForm").onsubmit=async function(e){e.preventDefault();var file=$("media").files[0],allowed=["image/jpeg","image/png","image/webp","video/mp4"];if(!file||allowed.indexOf(file.type)<0){notice("uploadNotice","Ce format n'est pas pris en charge. Utilisez une image JPEG, PNG, WebP ou une vidéo MP4.","error");return}if(file.size>50*1024*1024){notice("uploadNotice","Le fichier dépasse 50 Mo.","error");return}
 var sess=(await db.auth.getSession()).data.session;if(!sess){notice("uploadNotice","Session expirée. Reconnectez-vous.","error");return}
-$("send").disabled=true;notice("uploadNotice","Envoi en cours…");var ext=file.name.split(".").pop().toLowerCase();var path=sess.user.id+"/"+randomName()+"."+ext;
-var up=await db.storage.from("souvenirs-famille").upload(path,file,{contentType:file.type,upsert:false});
+$("send").disabled=true;notice("uploadNotice","Préparation du souvenir…");var prepared=await optimizePhoto(file);var path=sess.user.id+"/"+randomName()+"."+prepared.extension;
+notice("uploadNotice","Envoi en cours…");var up=await db.storage.from("souvenirs-famille").upload(path,prepared.blob,{contentType:prepared.type,upsert:false});
 if(up.error){notice("uploadNotice","Échec de l'envoi : "+up.error.message,"error");$("send").disabled=false;return}
 var row={type_media:file.type==="video/mp4"?"video":"photo",fichier_path:path,prenom:member.prenom,message:$("message").value.trim()||null,auteur_id:sess.user.id};
 var ins=await db.from("souvenirs").insert(row);$("send").disabled=false;
