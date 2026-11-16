@@ -5,7 +5,21 @@
  #noticeText{font:normal 29px Georgia,serif;line-height:1.25;margin:0 0 22px}
  #noticeCard button{font-size:23px;font-weight:bold;padding:15px 21px;min-width:125px;border-radius:12px;border:0;margin:5px}
  #noticeSee{background:#9b655e;color:white}
- #noticeLater{background:#e4d6ca;color:#45342f}#tools button,.back{border:0;border-radius:10px;background:rgba(40,36,34,.85);color:#fff;font-size:19px;padding:13px 17px;margin-right:9px}#gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewer img,#viewer video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:75px;left:50%;z-index:4;transform:translateX(-50%);-webkit-transform:translateX(-50%);white-space:nowrap;background:rgba(35,26,25,.92);padding:10px;border-radius:16px}
+ #noticeLater{background:#e4d6ca;color:#45342f}#tools button,.back{border:0;border-radius:10px;background:rgba(40,36,34,.85);color:#fff;font-size:19px;padding:13px 17px;margin-right:9px}#home{display:none;position:absolute;z-index:6;top:0;left:0;width:100%;height:100%;background:#f6eee6;color:#48372f;text-align:center}
+#homeContent{position:absolute;left:0;top:50%;width:100%;transform:translateY(-50%);-webkit-transform:translateY(-50%);padding:20px}
+#home h1{font:normal 46px Georgia,serif;margin:0 0 42px}
+#home button{display:block;width:75%;max-width:460px;margin:20px auto;border:0;background:#9b655e;color:white;border-radius:20px;font-size:34px;padding:28px 15px}
+#home p{font-size:19px;color:#76665f}
+#galleryControls{margin:10px 0 20px;font-size:20px}
+#galleryControls label{display:inline-block;margin-right:12px}
+#galleryControls select,#galleryControls button{font-size:21px;padding:12px;border:1px solid #bbaaa1;border-radius:12px;background:white;color:#473832;margin:5px}
+#galleryControls button.active{background:#9b655e;color:white}
+#moreGallery{font-size:22px;background:#9b655e;color:white;border:0;border-radius:12px;padding:14px 28px;margin:22px auto;display:none}
+.tile{position:relative}
+.favoriteTile{position:absolute;right:6px;top:6px;background:rgba(255,255,255,.92);color:#8c6d67;border:0;border-radius:9px;font-size:27px;padding:5px 9px}
+.favoriteTile.isFavorite{color:#c48735}
+#viewerFavorite{position:absolute;z-index:5;top:12px;right:14px;font-size:25px;background:#f6eee6;color:#473832;border:0;border-radius:10px;padding:11px 18px}
+#gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewer img,#viewer video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:75px;left:50%;z-index:4;transform:translateX(-50%);-webkit-transform:translateX(-50%);white-space:nowrap;background:rgba(35,26,25,.92);padding:10px;border-radius:16px}
  #reactPanel button,#viewerReactions button{border:2px solid transparent;border-radius:13px;background:#f6eee6;font-size:30px;margin:0 3px;padding:8px 12px}
  #reactPanel button.selected,#viewerReactions button.selected{border-color:#b86d60;background:#f2c9c0}
  #reactHint{position:absolute;bottom:65px;right:14px;z-index:3;background:rgba(35,26,25,.68);padding:8px;border-radius:10px;font-size:15px}
@@ -14,15 +28,16 @@
  #dark{display:none;position:absolute;z-index:10;top:0;left:0;width:100%;height:100%;background:#000;color:#666;text-align:center}#dark span{position:absolute;bottom:18px;left:0;right:0;font-size:16px}#status{position:absolute;z-index:2;bottom:10px;right:12px;color:#bbb;font-size:12px} @media(max-width:650px){.tile{width:48%}#tools button{font-size:17px;padding:10px}#login h1{font-size:32px}} 
 </style></head><body>
 <div id="login"><h1>Les souvenirs de Mamie ❤️</h1><p>Première connexion au cadre</p><input id="email" type="email" placeholder="Adresse e-mail"><input id="password" type="password" placeholder="Mot de passe"><button id="connect">Afficher les souvenirs</button><p id="error"></p><p>La connexion sera conservée sur cet iPad.</p></div>
-<div id="stage"><img id="photo" alt="Souvenir familial"><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openGallery">☷ Galerie</button><button id="sleep">☾ Éteindre</button></div><div id="status"></div></div>
-<div id="gallery"><button class="back" id="closeGallery">← Diaporama</button><h1>Nos souvenirs ❤️</h1><div id="grid"></div></div>
-<div id="viewer"><button class="back" id="closeViewer">← Galerie</button><div id="viewerContent"></div><div id="viewerReactions"></div><div id="viewerCaption" class="caption"></div></div>
+<div id="stage"><img id="photo" alt="Souvenir familial"><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
+<div id="home"><div id="homeContent"><h1>Les souvenirs de Mamie ❤️</h1><button type="button" id="homeGallery">🖼 Galerie</button><button type="button" id="homeSlideshow">▶ Diaporama</button><p>Le diaporama démarre automatiquement après 3 minutes.</p></div></div>
+<div id="gallery"><button class="back" id="closeGallery">← Accueil</button><h1>Nos souvenirs ❤️</h1><div id="galleryControls"><label for="gallerySort">Trier par :</label><select id="gallerySort"><option value="newest">Date · plus récentes</option><option value="oldest">Date · plus anciennes</option><option value="sender">Expéditeur · A à Z</option></select><button type="button" id="favoriteFilter">☆ Mes favoris</button></div><div id="grid"></div><button type="button" id="moreGallery">Voir plus de souvenirs</button></div>
+<div id="viewer"><button class="back" id="closeViewer">← Galerie</button><button type="button" id="viewerFavorite">☆ Favori</button><div id="viewerContent"></div><div id="viewerReactions"></div><div id="viewerCaption" class="caption"></div></div>
 <div id="dark"><span>Toucher pour rallumer</span></div>
 <script>
 (function(){
 "use strict";
 var BASE="https://rqzqudoiqlqjpzvmvlwq.supabase.co", KEY="sb_publishable_kjnfYZwCw5guEnFuucq5Qg_9N4WYcrM";
-var access="",refresh="",expiry=0,items=[],current=0,lastActivity=new Date().getTime(),lastCount=-1,lastGalleryRender=0,seenIds={},initialized=false,latestNewItem=null,manualUntil=0,mode="slideshow",activeVideo=null,loading=false,signedCache={},signing={},loadedCache={},showSequence=0,galleryDirty=true,cadreId=null,reactionMap={},viewerItem=null;
+var access="",refresh="",expiry=0,items=[],current=0,lastActivity=new Date().getTime(),lastCount=-1,lastGalleryRender=0,seenIds={},initialized=false,latestNewItem=null,manualUntil=0,mode="slideshow",activeVideo=null,loading=false,signedCache={},signing={},loadedCache={},showSequence=0,galleryDirty=true,cadreId=null,reactionMap={},viewerItem=null,favoriteMap={},galleryFavoritesOnly=false,galleryShown=36,homeTimer=null;
 function el(id){return document.getElementById(id)}
 function visible(id,yes){el(id).style.display=yes?"block":"none"}
 function text(id,s){el(id).textContent=s||""}
@@ -36,11 +51,15 @@ function clear(){access="";refresh="";expiry=0;try{localStorage.removeItem("mami
 function setTokens(r){if(!r||!r.access_token)return false;access=r.access_token;refresh=r.refresh_token||refresh;expiry=new Date().getTime()+((r.expires_in||3600)*1000);save();return true}
 function authReady(done){if(!access){done(false);return}if(new Date().getTime()<expiry-120000){done(true);return}if(!refresh){done(false);return}
  request("POST","/auth/v1/token?grant_type=refresh_token",{refresh_token:refresh},false,function(code,r){if(code===200&&setTokens(r)){done(true)}else{clear();visible("login",true);text("error","Session expirée. Reconnectez-vous.");done(false)}})}
-function start(){visible("login",false);reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
+function scheduleHome(){if(homeTimer)clearTimeout(homeTimer);homeTimer=setTimeout(function(){if(mode==="home")showSlideshow()},180000)}
+function showHome(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;viewerItem=null;mode="home";visible("gallery",false);visible("viewer",false);visible("reactPanel",false);visible("home",true);scheduleHome()}
+function showSlideshow(){if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="slideshow";visible("home",false);visible("gallery",false);visible("viewer",false);visible("reactPanel",false);if(items.length)showPhoto(current)}
+function showGallery(){touch();if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="gallery";visible("home",false);visible("viewer",false);visible("gallery",true);galleryShown=36;renderGallery()}
+function start(){visible("login",false);showHome();reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
 function login(){text("error","Connexion…");var email=el("email").value,password=el("password").value;request("POST","/auth/v1/token?grant_type=password",{email:email,password:password},false,function(code,r){if(code===200&&setTokens(r)){text("error","");start()}else{text("error","Connexion impossible. Vérifiez vos identifiants et les autorisations.")}})}
 el("connect").onclick=login;
 function reload(){if(loading)return;loading=true;authReady(function(ok){if(!ok){loading=false;return}request("GET","/rest/v1/cadres_autorises?select=user_id%2Cnom&limit=1",null,true,function(code,m){if(code!==200||!m||!m.length){loading=false;visible("login",true);text("error","Ce compte doit être autorisé comme cadre pour accéder à l'album.");return}
-cadreId=m[0].user_id;loadReactions();request("GET","/rest/v1/souvenirs?select=id%2Ctype_media%2Cfichier_path%2Cprenom%2Cmessage%2Ccreated_at&order=created_at.desc&limit=200",null,true,function(code,data){loading=false;if(code!==200||!data||!data.length&&code!==200){text("status","Connexion difficile. Nouvel essai bientôt.");return}
+cadreId=m[0].user_id;loadReactions();loadFavorites();request("GET","/rest/v1/souvenirs?select=id%2Ctype_media%2Cfichier_path%2Cprenom%2Cmessage%2Ccreated_at&order=created_at.desc&limit=200",null,true,function(code,data){loading=false;if(code!==200||!data||!data.length&&code!==200){text("status","Connexion difficile. Nouvel essai bientôt.");return}
 var oldFirst=items.length?items[0].id:"",same=items.length===data.length&&oldFirst===(data.length?data[0].id:"");items=data;
 if(initialized){
  var added=[];
@@ -154,9 +173,52 @@ function saveReaction(item,emoji){
  })
  })
 }
-function renderGallery(){galleryDirty=false;lastGalleryRender=new Date().getTime();var grid=el("grid");while(grid.firstChild)grid.removeChild(grid.firstChild);for(var i=0;i<items.length&&i<24;i++){(function(item){var tile=document.createElement("div");tile.className="tile";var img=document.createElement("img");img.alt="Souvenir";tile.appendChild(img);if(item.type_media==="video"){var p=document.createElement("div");p.className="play";p.textContent="▶";tile.appendChild(p)}
-var label=document.createElement("div");label.className="label";label.textContent=item.prenom+" · "+(item.type_media==="video"?"Vidéo":"Photo");tile.appendChild(label);tile.onclick=function(){openItem(item)};grid.appendChild(tile);if(item.type_media==="photo"){signed(item.fichier_path,function(u){if(u)img.src=u})}else{img.style.background="#8c6d67"}})(items[i])}}
-function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;renderReactionButtons(item,"viewerReactions");text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else node.alt="Souvenir";c.appendChild(node)})}
+function loadFavorites(){
+ request("GET","/rest/v1/favoris_mamie?select=souvenir_id%2Ccadre_id",null,true,function(code,data){
+ if(code!==200||!data)return;
+ favoriteMap={};for(var i=0;i<data.length;i++)if(data[i].cadre_id===cadreId)favoriteMap[data[i].souvenir_id]=true;
+ if(mode==="gallery")renderGallery();
+ if(viewerItem)updateViewerFavorite()
+ })
+}
+function toggleFavorite(item,callback){
+ if(!cadreId||!item)return;
+ var was=!!favoriteMap[item.id],method=was?"DELETE":"POST";
+ var path=was?"/rest/v1/favoris_mamie?souvenir_id=eq."+encodeURIComponent(item.id)+"&cadre_id=eq."+encodeURIComponent(cadreId):"/rest/v1/favoris_mamie";
+ authReady(function(ok){if(!ok)return;
+ request(method,path,was?null:{souvenir_id:item.id,cadre_id:cadreId},true,function(code){
+ if(code>=200&&code<300){if(was)delete favoriteMap[item.id];else favoriteMap[item.id]=true;updateViewerFavorite();if(mode==="gallery")renderGallery();if(callback)callback(true)}
+ else if(callback)callback(false)
+ })
+ })
+}
+function updateViewerFavorite(){var b=el("viewerFavorite");if(!viewerItem)return;b.textContent=favoriteMap[viewerItem.id]?"★ Favori":"☆ Favori"}
+function renderGallery(){
+ galleryDirty=false;lastGalleryRender=new Date().getTime();
+ var grid=el("grid");while(grid.firstChild)grid.removeChild(grid.firstChild);
+ var sort=el("gallerySort").value,filtered=[];
+ for(var i=0;i<items.length;i++)if(!galleryFavoritesOnly||favoriteMap[items[i].id])filtered.push(items[i]);
+ filtered.sort(function(a,b){
+ if(sort==="sender"){var aa=(a.prenom||"").toLowerCase(),bb=(b.prenom||"").toLowerCase();if(aa<bb)return -1;if(aa>bb)return 1}
+ var x=a.created_at||"",y=b.created_at||"";return sort==="oldest"?(x<y?-1:x>y?1:0):(x>y?-1:x<y?1:0)
+ });
+ var max=Math.min(galleryShown,filtered.length);
+ for(var j=0;j<max;j++){(function(item){
+ var tile=document.createElement("div");tile.className="tile";
+ var img=document.createElement("img");img.alt="Souvenir";tile.appendChild(img);
+ if(item.type_media==="video"){var p=document.createElement("div");p.className="play";p.textContent="▶";tile.appendChild(p)}
+ var label=document.createElement("div");label.className="label";label.textContent=item.prenom+" · "+(item.type_media==="video"?"Vidéo":"Photo");tile.appendChild(label);
+ tile.onclick=function(){openItem(item)};
+ var star=document.createElement("button");star.type="button";star.className="favoriteTile"+(favoriteMap[item.id]?" isFavorite":"");star.textContent=favoriteMap[item.id]?"★":"☆";star.title="Mettre en favori";
+ star.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleFavorite(item)};tile.appendChild(star);
+ grid.appendChild(tile);
+ if(item.type_media==="photo"){signed(item.fichier_path,function(u){if(u)img.src=u})}else img.style.background="#8c6d67"
+ })(filtered[j])}
+ el("moreGallery").style.display=filtered.length>max?"block":"none";
+ el("favoriteFilter").className=galleryFavoritesOnly?"active":"";
+ el("favoriteFilter").textContent=galleryFavoritesOnly?"★ Tous les souvenirs":"☆ Mes favoris";
+}
+function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else node.alt="Souvenir";c.appendChild(node)})}
 function closeAll(){viewerItem=null;visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
 function touch(){lastActivity=new Date().getTime()}
 el("noticeLater").onclick=function(){touch();latestNewItem=null;visible("badge",false)};
@@ -169,10 +231,17 @@ el("noticeSee").onclick=function(){
  openItem(selected)
 };
 el("photo").onclick=function(){touch();manualUntil=new Date().getTime()+30000;visible("reactPanel",el("reactPanel").style.display!=="block")};
+el("homeGallery").onclick=showGallery;
+el("homeSlideshow").onclick=showSlideshow;
+el("openHome").onclick=showHome;
+el("gallerySort").onchange=function(){galleryShown=36;renderGallery()};
+el("favoriteFilter").onclick=function(){galleryFavoritesOnly=!galleryFavoritesOnly;galleryShown=36;renderGallery()};
+el("moreGallery").onclick=function(){galleryShown+=36;renderGallery()};
+el("viewerFavorite").onclick=function(){if(viewerItem)toggleFavorite(viewerItem)};
 el("previous").onclick=function(){changePhoto(-1)};
 el("next").onclick=function(){changePhoto(1)};
-el("openGallery").onclick=function(){touch();mode="gallery";visible("gallery",true);if(galleryDirty||new Date().getTime()-lastGalleryRender>1800000)renderGallery()};
-el("closeGallery").onclick=function(){touch();closeAll()};
+el("openGallery").onclick=showGallery;
+el("closeGallery").onclick=showHome;
 el("closeViewer").onclick=function(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;mode="gallery";visible("viewer",false)};
 el("sleep").onclick=function(){touch();mode="sleep";visible("dark",true)};
 el("dark").onclick=function(){touch();mode="slideshow";visible("dark",false)};
