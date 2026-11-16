@@ -42,7 +42,10 @@ if(initialized){
  if(added.length){
   var photos=0,videos=0;
   for(var ai=0;ai<added.length;ai++){if(added[ai].type_media==="video")videos++;else photos++}
-  var message=photos&&videos?"❤️ Vous avez reçu "+photos+" nouvelle(s) photo(s) et "+videos+" vidéo(s) !":videos?"❤️ Vous avez reçu "+(videos===1?"une nouvelle vidéo !":videos+" nouvelles vidéos !"):"❤️ Vous avez reçu "+(photos===1?"une nouvelle photo !":photos+" nouvelles photos !");
+  var sender=added[0].prenom||"Quelqu'un",oneSender=true;
+  for(var pi=1;pi<added.length;pi++){if((added[pi].prenom||"Quelqu'un")!==sender){oneSender=false;break}}
+  var who=oneSender?sender:"Votre famille";
+  var message=photos&&videos?who+" vous a envoyé "+photos+" photo"+(photos>1?"s":"")+" et "+videos+" vidéo"+(videos>1?"s":"")+" !":videos?who+" vous a envoyé "+(videos===1?"une nouvelle vidéo !":videos+" nouvelles vidéos !"):who+" vous a envoyé "+(photos===1?"une nouvelle photo !":photos+" nouvelles photos !");
   text("noticeText",message);latestNewItem=added[0];visible("badge",true)
  }
 }
