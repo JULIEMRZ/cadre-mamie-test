@@ -81,6 +81,8 @@ function showPhoto(index){
  signed(item.fichier_path,function(src){
   if(!src||sequence!==showSequence)return;
   var photo=el("photo");
+  // For a single image, display directly without waiting for a second Image object.
+  if(items.length===1){photo.src=src;visible("photo",true);visible("empty",false);text("info",item.prenom+(item.message?" — "+item.message:""));return}
   if(photo.getAttribute("src")===src&&photo.complete){visible("photo",true);visible("empty",false);preloadNext(current);return}
   // Keep the previous image visible until the new image has fully loaded.
   var picture=new Image();
