@@ -11,13 +11,14 @@
 <script>
 (function(){
 "use strict";
+var initialInvitationHash=window.location.hash||"";
 var url="https://rqzqudoiqlqjpzvmvlwq.supabase.co", key="sb_publishable_kjnfYZwCw5guEnFuucq5Qg_9N4WYcrM", db=window.supabase.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
 var $=function(id){return document.getElementById(id)};
 function show(id,on){$(id).classList.toggle("hidden",!on)}
 function notice(id,message,kind){$(id).textContent=message;$(id).className="notice "+(kind||"")}
 function escapeText(s){return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-var member=null,inviteMode=location.hash.indexOf("type=invite")!==-1||location.hash.indexOf("type=recovery")!==-1;
-async function refresh(){var a=await db.auth.getSession(),session=a.data.session; if(!session){show("login",true);show("app",false);show("accept",false);return}
+var member=null,inviteMode=initialInvitationHash.indexOf("type=invite")!==-1||initialInvitationHash.indexOf("type=recovery")!==-1;
+async function refresh(){var a=await db.auth.getSession(),session=a.data.session; if(!session){show("login",true);show("app",false);show("accept",false);if(inviteMode)notice("loginNotice","Le lien d’invitation n’a pas pu être validé. Il a peut-être expiré : demandez une nouvelle invitation.","error");return}
 if(inviteMode){show("login",false);show("app",false);show("accept",true);return}
 var r=await db.from("membres_famille").select("prenom").eq("user_id",session.user.id).maybeSingle();
 if(r.error||!r.data){await db.auth.signOut();show("app",false);show("login",true);notice("loginNotice","Votre compte existe, mais il doit encore être autorisé par l'administratrice de l'album.","error");return}
@@ -51,7 +52,7 @@ var row={type_media:(file.type==="video/mp4"||isMov)?"video":"photo",fichier_pat
 var ins=await db.from("souvenirs").insert(row);$("send").disabled=false;
 if(ins.error){notice("uploadNotice","Fichier envoyé, mais son inscription dans l'album a échoué. Contactez l'administratrice : "+ins.error.message,"error");return}
 $("media").value="";$("preview").innerHTML="";$("message").value="";notice("uploadNotice",isMov?"Vidéo envoyée ! ❤️ Attention : si elle utilise le codec HEVC/H.265, l’ancien iPad ne pourra pas la lire sans conversion.":"Souvenir envoyé à Mamie ! ❤️","success");loadGallery()};
-async async function loadGallery(){var q=await db.from("souvenirs").select("id,created_at,type_media,fichier_path,prenom,message").order("created_at",{ascending:false}).limit(36);
+async function loadGallery(){var q=await db.from("souvenirs").select("id,created_at,type_media,fichier_path,prenom,message").order("created_at",{ascending:false}).limit(36);
 $("gallery").innerHTML="";if(q.error){$("empty").textContent="Impossible de charger la galerie.";show("empty",true);return}
 show("empty",q.data.length===0);
 var reactionsResult=await db.from("reactions_mamie").select("souvenir_id,emoji");
@@ -61,7 +62,7 @@ q.data.forEach(async function(item){var card=document.createElement("div");card.
 card.appendChild(cap);$("gallery").appendChild(card);
 var signed=await db.storage.from("souvenirs-famille").createSignedUrl(item.fichier_path,3600);if(signed.error){media.textContent="Média indisponible";return}
 media.style.padding="0";media.textContent="";var node=document.createElement(item.type_media==="video"?"video":"img");node.src=signed.data.signedUrl;if(item.type_media==="video"){node.controls=true;node.preload="metadata";node.playsInline=true}else node.alt="Souvenir envoyé par "+item.prenom;media.appendChild(node)})}
-db.auth.onAuthStateChange(function(event){if(event==="PASSWORD_RECOVERY"){inviteMode=true;show("accept",true);show("login",false);show("app",false)}});
+db.auth.onAuthStateChange(function(event){if(event==="PASSWORD_RECOVERY"){inviteMode=true;show("accept",true);show("login",false);show("app",false)}else if(event==="SIGNED_IN"&&inviteMode){show("accept",true);show("login",false);show("app",false)}});
 refresh();
 })();
 </script></body></html>
