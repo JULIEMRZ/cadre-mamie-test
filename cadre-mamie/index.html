@@ -166,7 +166,7 @@ function renderReactionButtons(item,target){
  var symbol=document.createElement("span");symbol.className="reactionEmoji";var reactionImg=document.createElement("img");reactionImg.src=choice.image;reactionImg.alt=choice.label;symbol.appendChild(reactionImg);
  var caption=document.createElement("span");caption.className="reactionLabel";caption.textContent=choice.label;
  btn.appendChild(symbol);btn.appendChild(caption);
- btn.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();touch();saveReaction(item,choice.emoji)};
+ btn.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();touch();visible("reactPanel",false);visible("viewerReactions",false);saveReaction(item,choice.emoji)};
  row.appendChild(btn)
  })(choices[i])}
  panel.appendChild(row);
@@ -226,8 +226,8 @@ function renderGallery(){
  el("favoriteFilter").className=galleryFavoritesOnly?"active":"";
  el("favoriteFilter").textContent=galleryFavoritesOnly?"★ Tous les souvenirs":"☆ Mes favoris";
 }
-function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");visible("viewerReactions",true);text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else {node.alt="Souvenir";node.onclick=function(){touch();visible("viewerReactions",el("viewerReactions").style.display!=="block")}}c.appendChild(node)})}
-function closeAll(){viewerItem=null;visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
+function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");visible("viewerReactions",true);text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else {node.alt="Souvenir";node.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("viewerReactions")}}c.appendChild(node)})}
+function closeAll(){viewerItem=null;visible("viewerReactions",false);visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
 function touch(){lastActivity=new Date().getTime()}
 el("noticeLater").onclick=function(){touch();latestNewItem=null;visible("badge",false)};
 el("noticeSee").onclick=function(){
@@ -237,7 +237,11 @@ el("noticeSee").onclick=function(){
  showGallery();
  openItem(selected)
 };
-el("photo").onclick=function(){touch();manualUntil=new Date().getTime()+30000;visible("reactPanel",el("reactPanel").style.display!=="block")};
+function toggleReactions(id){touch();if(id==="reactPanel")manualUntil=new Date().getTime()+30000;visible(id,el(id).style.display!=="block")}
+el("photo").onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("reactPanel")};
+el("reactPanel").onclick=function(event){if(event&&event.target&&event.target.tagName==="BUTTON")return;toggleReactions("reactPanel")};
+el("viewerReactions").onclick=function(event){if(event&&event.target&&event.target.tagName==="BUTTON")return;toggleReactions("viewerReactions")};
+el("viewer").onclick=function(event){if(!viewerItem||viewerItem.type_media!=="photo")return;var target=event&&event.target;if(target===el("viewer")||target===el("viewerContent"))toggleReactions("viewerReactions")};
 el("homeGallery").onclick=showGallery;
 el("homeSlideshow").onclick=showSlideshow;
 el("openHome").onclick=showHome;
