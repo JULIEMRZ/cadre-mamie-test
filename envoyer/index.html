@@ -5,7 +5,7 @@
 <section id="accept" class="card hidden"><h2>Activer mon invitation</h2><p class="muted">Choisissez un mot de passe pour votre compte familial (8 caractères minimum).</p><form id="acceptForm"><label>Nouveau mot de passe</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required><button class="btn" style="margin-top:16px" type="submit">Activer mon compte</button></form><p id="acceptNotice" class="notice hidden" role="status"></p></section>
 <section id="app" class="hidden"><div class="row" style="justify-content:space-between;padding:0 7px"><p id="hello" class="muted"></p><button id="logout" class="btn secondary" type="button">Se déconnecter</button></div>
 <div class="card"><h2>Envoyer un souvenir ✨</h2><p class="muted">Une photo ou une petite vidéo iPhone (MOV) ou MP4, 50 Mo maximum. Pour un ancien iPad, les vidéos MOV récentes peuvent nécessiter une conversion.</p><form id="uploadForm"><label for="media">Choisir une photo ou vidéo</label><input id="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,.mov,.mp4" required><div id="preview"></div><label for="firstName">Votre prénom</label><input id="firstName" maxlength="80" required><label for="message">Un mot pour Mamie (facultatif)</label><textarea id="message" maxlength="1000" placeholder="Coucou Mamie ! On pense fort à toi ❤️"></textarea><button class="btn" id="send" type="submit">Envoyer à Mamie ❤️</button></form><p class="notice hidden" id="uploadNotice" role="status"></p></div>
-<div class="card"><h2>Les derniers souvenirs</h2><div id="gallery" class="grid"></div><p id="empty" class="muted">Aucun souvenir pour le moment.</p></div></section>
+<div class="card"><h2>Mes derniers souvenirs envoyés 📸</h2><p class="muted">Retrouve les photos et vidéos que tu as envoyées à Mamie, ainsi que ses réactions.</p><div id="myGallery" class="grid"></div><p id="myEmpty" class="muted">Tu n’as pas encore envoyé de souvenir.</p></div><div class="card"><h2>Les derniers souvenirs de la famille ❤️</h2><p class="muted">Les photos et vidéos partagées par les autres membres de la famille.</p><div id="familyGallery" class="grid"></div><p id="familyEmpty" class="muted">Pas encore de souvenirs des autres membres.</p></div></section>
 <footer class="footer">Un album familial privé, fait avec amour.</footer></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script>
 <script>
@@ -52,16 +52,47 @@ var row={type_media:(file.type==="video/mp4"||isMov)?"video":"photo",fichier_pat
 var ins=await db.from("souvenirs").insert(row);$("send").disabled=false;
 if(ins.error){notice("uploadNotice","Fichier envoyé, mais son inscription dans l'album a échoué. Contactez l'administratrice : "+ins.error.message,"error");return}
 $("media").value="";$("preview").innerHTML="";$("message").value="";notice("uploadNotice",isMov?"Vidéo envoyée ! ❤️ Attention : si elle utilise le codec HEVC/H.265, l’ancien iPad ne pourra pas la lire sans conversion.":"Souvenir envoyé à Mamie ! ❤️","success");loadGallery()};
-async function loadGallery(){var q=await db.from("souvenirs").select("id,created_at,type_media,fichier_path,prenom,message").order("created_at",{ascending:false}).limit(36);
-$("gallery").innerHTML="";if(q.error){$("empty").textContent="Impossible de charger la galerie.";show("empty",true);return}
-show("empty",q.data.length===0);
-var reactionsResult=await db.from("reactions_mamie").select("souvenir_id,emoji");
-var reactions={};
-if(!reactionsResult.error&&reactionsResult.data){reactionsResult.data.forEach(function(r){if(!reactions[r.souvenir_id])reactions[r.souvenir_id]=[];reactions[r.souvenir_id].push(r.emoji)})}
-q.data.forEach(async function(item){var card=document.createElement("div");card.className="item";var media=document.createElement("div");media.style.padding="10px";media.textContent="Chargement…";card.appendChild(media);var cap=document.createElement("div");cap.className="meta";cap.innerHTML="<strong>"+escapeText(item.prenom)+"</strong>"+(item.type_media==="video"?" · 🎬 Vidéo":"")+(item.message?"<p>"+escapeText(item.message)+"</p>":"");if(reactions[item.id]&&reactions[item.id].length){var react=document.createElement("div");react.className="reactions";react.textContent="Mamie a réagi : "+reactions[item.id].join(" ");cap.appendChild(react)}
-card.appendChild(cap);$("gallery").appendChild(card);
-var signed=await db.storage.from("souvenirs-famille").createSignedUrl(item.fichier_path,3600);if(signed.error){media.textContent="Média indisponible";return}
-media.style.padding="0";media.textContent="";var node=document.createElement(item.type_media==="video"?"video":"img");node.src=signed.data.signedUrl;if(item.type_media==="video"){node.controls=true;node.preload="metadata";node.playsInline=true}else node.alt="Souvenir envoyé par "+item.prenom;media.appendChild(node)})}
+async function loadGallery(){
+ var sessionResult=await db.auth.getSession(),session=sessionResult.data.session;
+ if(!session)return;
+ var userId=session.user.id;
+ var fields="id,created_at,type_media,fichier_path,prenom,message,auteur_id";
+ var result=await Promise.all([
+  db.from("souvenirs").select(fields).eq("auteur_id",userId).order("created_at",{ascending:false}).limit(36),
+  db.from("souvenirs").select(fields).or("auteur_id.neq."+userId+",auteur_id.is.null").order("created_at",{ascending:false}).limit(36),
+  db.from("reactions_mamie").select("souvenir_id,emoji")
+ ]);
+ var mine=result[0],family=result[1],reactionsResult=result[2],reactions={};
+ if(!reactionsResult.error&&reactionsResult.data){reactionsResult.data.forEach(function(r){
+  if(!reactions[r.souvenir_id])reactions[r.souvenir_id]=[];
+  reactions[r.souvenir_id].push(r.emoji)
+ })}
+ renderMemories("myGallery","myEmpty",mine,reactions);
+ renderMemories("familyGallery","familyEmpty",family,reactions);
+}
+function renderMemories(gridId,emptyId,result,reactions){
+ var gallery=$(gridId);gallery.innerHTML="";
+ if(result.error){$(emptyId).textContent="Impossible de charger les souvenirs.";show(emptyId,true);return}
+ show(emptyId,result.data.length===0);
+ result.data.forEach(async function(item){
+  var card=document.createElement("div");card.className="item";
+  var media=document.createElement("div");media.style.padding="10px";media.textContent="Chargement…";card.appendChild(media);
+  var cap=document.createElement("div");cap.className="meta";
+  cap.innerHTML="<strong>"+escapeText(item.prenom)+"</strong>"+(item.type_media==="video"?" · 🎬 Vidéo":"")+(item.message?"<p>"+escapeText(item.message)+"</p>":"");
+  if(reactions[item.id]&&reactions[item.id].length){
+   var react=document.createElement("div");react.className="reactions";
+   react.textContent="Mamie a réagi : "+reactions[item.id].join(" ");cap.appendChild(react)
+  }
+  card.appendChild(cap);gallery.appendChild(card);
+  var signed=await db.storage.from("souvenirs-famille").createSignedUrl(item.fichier_path,3600);
+  if(signed.error){media.textContent="Média indisponible";return}
+  media.style.padding="0";media.textContent="";
+  var node=document.createElement(item.type_media==="video"?"video":"img");node.src=signed.data.signedUrl;
+  if(item.type_media==="video"){node.controls=true;node.preload="metadata";node.playsInline=true}
+  else node.alt="Souvenir envoyé par "+item.prenom;
+  media.appendChild(node)
+ })
+}
 db.auth.onAuthStateChange(function(event){if(event==="PASSWORD_RECOVERY"){inviteMode=true;show("accept",true);show("login",false);show("app",false)}else if(event==="SIGNED_IN"&&inviteMode){show("accept",true);show("login",false);show("app",false)}});
 refresh();
 })();
