@@ -35,7 +35,7 @@
 #todayDate{font-size:19px;margin:12px 0 19px;text-transform:capitalize}
 #todayCity{font-size:18px;font-weight:bold;margin-bottom:8px}
 #todayWeather{font-size:21px;line-height:1.5}
-#todayCredit{font-size:11px;opacity:.8;margin-top:22px}
+
 @media screen and (orientation:landscape) and (min-width:700px){
  #stage{background:#181717}
  #stage #photo{width:50%;left:0;top:0;height:100%;object-fit:contain}
@@ -45,17 +45,17 @@
  #todayDate{font-size:28px;margin:16px 0 32px}
  #todayCity{font-size:25px;margin-bottom:18px}
  #todayWeather{font-size:27px}
- #todayCredit{font-size:13px;opacity:.65;margin-top:40px}
+ 
  #stage #info{right:auto;width:50%}
  #stage #reactPanel{left:1%;width:48%;bottom:78px}
  #stage #reactHint{right:52%;bottom:70px}
  #stage #next{right:50%;margin-right:12px}
  #stage #badge{width:100%}
 }
-@media screen and (max-width:699px){#todayWidget{top:9px;right:8px;width:165px;padding:9px 7px}#todayTime{font-size:29px}#todayDate,#todayCity{font-size:14px;margin:5px}#todayWeather{font-size:15px}#todayCredit{font-size:9px;margin-top:8px}}
+@media screen and (max-width:699px){#todayWidget{top:9px;right:8px;width:165px;padding:9px 7px}#todayTime{font-size:29px}#todayDate,#todayCity{font-size:14px;margin:5px}#todayWeather{font-size:15px}}
 </style></head><body>
 <div id="login"><h1>Les souvenirs de Mamie ❤️</h1><p>Première connexion au cadre</p><input id="email" type="email" placeholder="Adresse e-mail"><input id="password" type="password" placeholder="Mot de passe"><button id="connect">Afficher les souvenirs</button><p id="error"></p><p>La connexion sera conservée sur cet iPad.</p></div>
-<div id="stage"><img id="photo" alt="Souvenir familial"><div id="todayWidget"><div id="todayTime">--:--</div><div id="todayDate"></div><div id="todayCity">Antibes</div><div id="todayWeather">Chargement de la météo…</div><div id="todayCredit"></div></div><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
+<div id="stage"><img id="photo" alt="Souvenir familial"><div id="todayWidget"><div id="todayTime">--:--</div><div id="todayDate"></div><div id="todayCity">Nice</div><div id="todayWeather">Chargement de la météo…</div></div><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
 <div id="home"><div id="homeContent"><h1>Les souvenirs de Mamie ❤️</h1><div id="homeButtons"><button type="button" id="homeGallery">🖼 Galerie</button><button type="button" id="homeSlideshow">▶ Diaporama</button></div><p>Le diaporama démarre automatiquement après 3 minutes.</p></div></div>
 <div id="gallery"><button class="back" id="closeGallery">← Accueil</button><h1>Nos souvenirs ❤️</h1><div id="galleryControls"><label for="gallerySort">Trier par :</label><select id="gallerySort"><option value="newest">Date · plus récentes</option><option value="oldest">Date · plus anciennes</option><option value="sender">Expéditeur · A à Z</option><option value="folders">📁 Dossiers par expéditeur</option></select><button type="button" id="favoriteFilter">☆ Mes favoris</button></div><div id="grid"></div><button type="button" id="moreGallery">Voir plus de souvenirs</button></div>
 <div id="viewer"><button class="back" id="closeViewer">← Galerie</button><button type="button" id="viewerFavorite">☆ Favori</button><div id="viewerContent"></div><div id="viewerReactions"></div><div id="viewerCaption" class="caption"></div></div>
