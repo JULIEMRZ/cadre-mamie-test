@@ -82,7 +82,7 @@ function scheduleHome(){if(homeTimer)clearTimeout(homeTimer);homeTimer=setTimeou
 function showHome(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;viewerItem=null;mode="home";visible("gallery",false);visible("viewer",false);visible("reactPanel",false);visible("home",true);scheduleHome()}
 function showSlideshow(){if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="slideshow";visible("home",false);visible("gallery",false);visible("viewer",false);visible("reactPanel",false);if(items.length)showPhoto(current)}
 function showGallery(){touch();if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="gallery";visible("home",false);visible("viewer",false);visible("gallery",true);galleryShown=36;renderGallery()}
-var weatherPosition={latitude:43.5804,longitude:7.1251,city:"Antibes"},weatherLastFetch=0;
+var weatherPosition={latitude:43.7102,longitude:7.2620,city:"Nice"},weatherLastFetch=0;
 function updateToday(){
  var now=new Date(),days=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],months=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
  text("todayTime",("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2));
@@ -103,16 +103,25 @@ function updateWeather(force){
  if(!force&&new Date().getTime()-weatherLastFetch<1800000)return;
  weatherLastFetch=new Date().getTime();
  text("todayCity",weatherPosition.city);
- var xhr=new XMLHttpRequest();
- var url="https://api.open-meteo.com/v1/forecast?latitude="+weatherPosition.latitude+"&longitude="+weatherPosition.longitude+"&current=temperature_2m,weather_code&timezone=auto";
- xhr.open("GET",url,true);
- xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;
-  try{if(xhr.status!==200)throw new Error("Météo indisponible");var data=JSON.parse(xhr.responseText),now=data.current;if(!now||typeof now.temperature_2m!=="number")throw new Error("Météo indisponible");
-  text("todayWeather",weatherDescription(now.weather_code)+" · "+Math.round(now.temperature_2m)+" °C")
-  }catch(error){text("todayWeather","Météo indisponible");weatherLastFetch=0}
- };
- xhr.onerror=function(){text("todayWeather","Météo indisponible");weatherLastFetch=0};
- xhr.send(null)
+ text("todayWeather","Chargement de la météo…");
+ authReady(function(ok){
+  if(!ok){text("todayWeather","Météo en attente de connexion");weatherLastFetch=0;return}
+  var xhr=new XMLHttpRequest();
+  var weatherUrl=BASE+"/functions/v1/meteo-cadre-mamie?latitude="+encodeURIComponent(weatherPosition.latitude)+"&longitude="+encodeURIComponent(weatherPosition.longitude);
+  xhr.open("GET",weatherUrl,true);
+  xhr.setRequestHeader("Authorization","Bearer "+access);
+  xhr.setRequestHeader("apikey",KEY);
+  xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;
+   try{
+    if(xhr.status!==200)throw new Error("Météo indisponible");
+    var weather=JSON.parse(xhr.responseText);
+    if(typeof weather.temperature!=="number"||typeof weather.code!=="number")throw new Error("Météo indisponible");
+    text("todayWeather",weatherDescription(weather.code)+" · "+Math.round(weather.temperature)+" °C")
+   }catch(error){text("todayWeather","Météo momentanément indisponible");weatherLastFetch=0}
+  };
+  xhr.onerror=function(){text("todayWeather","Météo momentanément indisponible");weatherLastFetch=0};
+  xhr.send(null)
+ })
 }
 function chooseWeatherLocation(){
  if(!navigator.geolocation){text("todayWeather","Localisation indisponible");return}
@@ -120,7 +129,7 @@ function chooseWeatherLocation(){
  navigator.geolocation.getCurrentPosition(function(position){
   weatherPosition={latitude:position.coords.latitude,longitude:position.coords.longitude,city:"Près de Mamie"};
   updateWeather(true)
- },function(){text("todayWeather","Localisation refusée · météo à Antibes");weatherPosition={latitude:43.5804,longitude:7.1251,city:"Antibes"};updateWeather(true)},{enableHighAccuracy:false,timeout:12000,maximumAge:3600000})
+ },function(){text("todayWeather","Localisation refusée · météo à Nice");weatherPosition={latitude:43.7102,longitude:7.2620,city:"Nice"};updateWeather(true)},{enableHighAccuracy:false,timeout:12000,maximumAge:3600000})
 }
 function start(){visible("login",false);updateToday();updateWeather(true);setInterval(updateToday,30000);setInterval(function(){updateWeather(false)},1800000);showHome();reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
 function login(){text("error","Connexion…");var email=el("email").value,password=el("password").value;request("POST","/auth/v1/token?grant_type=password",{email:email,password:password},false,function(code,r){if(code===200&&setTokens(r)){text("error","");start()}else{text("error","Connexion impossible. Vérifiez vos identifiants et les autorisations.")}})}
