@@ -29,9 +29,33 @@
  #reactHint{position:absolute;bottom:65px;right:14px;z-index:3;background:rgba(35,26,25,.68);padding:8px;border-radius:10px;font-size:15px}
  #reactStatus{font-size:15px;min-height:17px;color:#fff;margin-top:5px}
  #dark{display:none;position:absolute;z-index:10;top:0;left:0;width:100%;height:100%;background:#000;color:#666;text-align:center}#dark span{position:absolute;bottom:18px;left:0;right:0;font-size:16px}#status{position:absolute;z-index:2;bottom:10px;right:12px;color:#bbb;font-size:12px} @media(max-width:650px){.tile{width:48%}#tools button{font-size:17px;padding:10px}#login h1{font-size:32px}} 
+/* Slideshow dashboard: split-screen in landscape on the old iPad. */
+#todayWidget{position:absolute;top:16px;right:16px;z-index:2;width:225px;max-width:48%;padding:17px 12px;border-radius:17px;background:rgba(27,26,27,.82);color:#fff;text-align:center;text-shadow:0 1px 2px #151515;cursor:pointer}
+#todayTime{font-size:45px;font-weight:bold;line-height:1.12}
+#todayDate{font-size:19px;margin:12px 0 19px;text-transform:capitalize}
+#todayCity{font-size:18px;font-weight:bold;margin-bottom:8px}
+#todayWeather{font-size:21px;line-height:1.5}
+#todayCredit{font-size:11px;opacity:.8;margin-top:22px}
+@media screen and (orientation:landscape) and (min-width:700px){
+ #stage{background:#181717}
+ #stage #photo{width:50%;left:0;top:0;height:100%;object-fit:contain}
+ #stage #photo.fallback{left:25%;max-width:50%;width:auto;height:auto}
+ #todayWidget{top:0;right:0;width:50%;max-width:none;height:100%;border-radius:0;padding:17% 4% 3%;background:#ede3dd;color:#4d3c36;text-shadow:none}
+ #todayTime{font-size:69px}
+ #todayDate{font-size:28px;margin:16px 0 32px}
+ #todayCity{font-size:25px;margin-bottom:18px}
+ #todayWeather{font-size:27px}
+ #todayCredit{font-size:13px;opacity:.65;margin-top:40px}
+ #stage #info{right:auto;width:50%}
+ #stage #reactPanel{left:1%;width:48%;bottom:78px}
+ #stage #reactHint{right:52%;bottom:70px}
+ #stage #next{right:50%;margin-right:12px}
+ #stage #badge{width:100%}
+}
+@media screen and (max-width:699px){#todayWidget{top:9px;right:8px;width:165px;padding:9px 7px}#todayTime{font-size:29px}#todayDate,#todayCity{font-size:14px;margin:5px}#todayWeather{font-size:15px}#todayCredit{font-size:9px;margin-top:8px}}
 </style></head><body>
 <div id="login"><h1>Les souvenirs de Mamie ❤️</h1><p>Première connexion au cadre</p><input id="email" type="email" placeholder="Adresse e-mail"><input id="password" type="password" placeholder="Mot de passe"><button id="connect">Afficher les souvenirs</button><p id="error"></p><p>La connexion sera conservée sur cet iPad.</p></div>
-<div id="stage"><img id="photo" alt="Souvenir familial"><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
+<div id="stage"><img id="photo" alt="Souvenir familial"><div id="todayWidget"><div id="todayTime">--:--</div><div id="todayDate"></div><div id="todayCity">Antibes</div><div id="todayWeather">Chargement de la météo…</div><div id="todayCredit">Météo : Open-Meteo · toucher pour localiser</div></div><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
 <div id="home"><div id="homeContent"><h1>Les souvenirs de Mamie ❤️</h1><div id="homeButtons"><button type="button" id="homeGallery">🖼 Galerie</button><button type="button" id="homeSlideshow">▶ Diaporama</button></div><p>Le diaporama démarre automatiquement après 3 minutes.</p></div></div>
 <div id="gallery"><button class="back" id="closeGallery">← Accueil</button><h1>Nos souvenirs ❤️</h1><div id="galleryControls"><label for="gallerySort">Trier par :</label><select id="gallerySort"><option value="newest">Date · plus récentes</option><option value="oldest">Date · plus anciennes</option><option value="sender">Expéditeur · A à Z</option><option value="folders">📁 Dossiers par expéditeur</option></select><button type="button" id="favoriteFilter">☆ Mes favoris</button></div><div id="grid"></div><button type="button" id="moreGallery">Voir plus de souvenirs</button></div>
 <div id="viewer"><button class="back" id="closeViewer">← Galerie</button><button type="button" id="viewerFavorite">☆ Favori</button><div id="viewerContent"></div><div id="viewerReactions"></div><div id="viewerCaption" class="caption"></div></div>
@@ -58,7 +82,47 @@ function scheduleHome(){if(homeTimer)clearTimeout(homeTimer);homeTimer=setTimeou
 function showHome(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;viewerItem=null;mode="home";visible("gallery",false);visible("viewer",false);visible("reactPanel",false);visible("home",true);scheduleHome()}
 function showSlideshow(){if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="slideshow";visible("home",false);visible("gallery",false);visible("viewer",false);visible("reactPanel",false);if(items.length)showPhoto(current)}
 function showGallery(){touch();if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="gallery";visible("home",false);visible("viewer",false);visible("gallery",true);galleryShown=36;renderGallery()}
-function start(){visible("login",false);showHome();reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
+var weatherPosition={latitude:43.5804,longitude:7.1251,city:"Antibes"},weatherLastFetch=0;
+function updateToday(){
+ var now=new Date(),days=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],months=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+ text("todayTime",("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2));
+ text("todayDate",days[now.getDay()]+" "+now.getDate()+" "+months[now.getMonth()]);
+}
+function weatherDescription(code){
+ if(code===0)return "☀ Ciel dégagé";
+ if(code===1||code===2)return "⛅ Éclaircies";
+ if(code===3)return "☁ Nuageux";
+ if(code===45||code===48)return "☁ Brouillard";
+ if(code===51||code===53||code===55||code===56||code===57)return "☂ Bruine";
+ if(code===61||code===63||code===65||code===66||code===67||code===80||code===81||code===82)return "☂ Pluie";
+ if(code===71||code===73||code===75||code===77||code===85||code===86)return "❄ Neige";
+ if(code===95||code===96||code===99)return "☂ Orage";
+ return "☁ Météo";
+}
+function updateWeather(force){
+ if(!force&&new Date().getTime()-weatherLastFetch<1800000)return;
+ weatherLastFetch=new Date().getTime();
+ text("todayCity",weatherPosition.city);
+ var xhr=new XMLHttpRequest();
+ var url="https://api.open-meteo.com/v1/forecast?latitude="+weatherPosition.latitude+"&longitude="+weatherPosition.longitude+"&current=temperature_2m,weather_code&timezone=auto";
+ xhr.open("GET",url,true);
+ xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;
+  try{if(xhr.status!==200)throw new Error("Météo indisponible");var data=JSON.parse(xhr.responseText),now=data.current;if(!now||typeof now.temperature_2m!=="number")throw new Error("Météo indisponible");
+  text("todayWeather",weatherDescription(now.weather_code)+" · "+Math.round(now.temperature_2m)+" °C")
+  }catch(error){text("todayWeather","Météo indisponible");weatherLastFetch=0}
+ };
+ xhr.onerror=function(){text("todayWeather","Météo indisponible");weatherLastFetch=0};
+ xhr.send(null)
+}
+function chooseWeatherLocation(){
+ if(!navigator.geolocation){text("todayWeather","Localisation indisponible");return}
+ text("todayWeather","Recherche de la météo locale…");
+ navigator.geolocation.getCurrentPosition(function(position){
+  weatherPosition={latitude:position.coords.latitude,longitude:position.coords.longitude,city:"Près de Mamie"};
+  updateWeather(true)
+ },function(){text("todayWeather","Localisation refusée · météo à Antibes");weatherPosition={latitude:43.5804,longitude:7.1251,city:"Antibes"};updateWeather(true)},{enableHighAccuracy:false,timeout:12000,maximumAge:3600000})
+}
+function start(){visible("login",false);updateToday();updateWeather(true);setInterval(updateToday,30000);setInterval(function(){updateWeather(false)},1800000);showHome();reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
 function login(){text("error","Connexion…");var email=el("email").value,password=el("password").value;request("POST","/auth/v1/token?grant_type=password",{email:email,password:password},false,function(code,r){if(code===200&&setTokens(r)){text("error","");start()}else{text("error","Connexion impossible. Vérifiez vos identifiants et les autorisations.")}})}
 el("connect").onclick=login;
 function reload(){if(loading)return;loading=true;authReady(function(ok){if(!ok){loading=false;return}request("GET","/rest/v1/cadres_autorises?select=user_id%2Cnom&limit=1",null,true,function(code,m){if(code!==200||!m||!m.length){loading=false;visible("login",true);text("error","Ce compte doit être autorisé comme cadre pour accéder à l'album.");return}
@@ -254,6 +318,7 @@ function appendMemoryTile(item,container){
 function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");visible("viewerReactions",true);text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else {node.alt="Souvenir";node.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("viewerReactions")}}c.appendChild(node)})}
 function closeAll(){viewerItem=null;visible("viewerReactions",false);visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
 function touch(){lastActivity=new Date().getTime()}
+el("todayWidget").onclick=function(){touch();chooseWeatherLocation()};
 el("noticeLater").onclick=function(){touch();latestNewItem=null;visible("badge",false)};
 el("noticeSee").onclick=function(){
  touch();visible("badge",false);
