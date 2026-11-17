@@ -141,7 +141,7 @@ if(initialized){
   for(var pi=1;pi<added.length;pi++){if((added[pi].prenom||"Quelqu'un")!==sender){oneSender=false;break}}
   var who=oneSender?sender:"Votre famille";
   var message=photos&&videos?who+" vous a envoyé "+photos+" photo"+(photos>1?"s":"")+" et "+videos+" vidéo"+(videos>1?"s":"")+" !":videos?who+" vous a envoyé "+(videos===1?"une nouvelle vidéo !":videos+" nouvelles vidéos !"):who+" vous a envoyé "+(photos===1?"une nouvelle photo !":photos+" nouvelles photos !");
-  text("noticeText",message);latestNewItem=added[0];visible("badge",true)
+  text("noticeText",message);latestNewItem=added[0];visible("badge",true);playNewMemoryChime()
  }
 }
 for(var si=0;si<data.length;si++)seenIds[data[si].id]=true;
@@ -320,6 +320,39 @@ function appendMemoryTile(item,container){
 }
 function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");visible("viewerReactions",true);text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else {node.alt="Souvenir";node.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("viewerReactions")}}c.appendChild(node)})}
 function closeAll(){viewerItem=null;visible("viewerReactions",false);visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
+// The old iPad requires Web Audio to be unlocked by an actual user gesture.
+var chimeContext=null,chimeReady=false;
+function enableChime(){
+ if(chimeReady)return;
+ try{
+  var AudioCtor=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtor)return;
+  if(!chimeContext)chimeContext=new AudioCtor();
+  if(chimeContext.resume)chimeContext.resume();
+  var buffer=chimeContext.createBuffer(1,1,22050),source=chimeContext.createBufferSource();
+  source.buffer=buffer;source.connect(chimeContext.destination);
+  if(source.start)source.start(0);else if(source.noteOn)source.noteOn(0);
+  chimeReady=true
+ }catch(e){}
+}
+function playNewMemoryChime(){
+ if(!chimeReady||!chimeContext)return;
+ try{
+  if(chimeContext.resume)chimeContext.resume();
+  var base=chimeContext.currentTime+0.025;
+  var notes=[{frequency:659.25,delay:0},{frequency:783.99,delay:0.25}];
+  for(var i=0;i<notes.length;i++){
+   var osc=chimeContext.createOscillator(),gain=chimeContext.createGain();
+   osc.type="sine";osc.frequency.value=notes[i].frequency;
+   osc.connect(gain);gain.connect(chimeContext.destination);
+   var time=base+notes[i].delay;
+   gain.gain.setValueAtTime(0.0001,time);
+   gain.gain.linearRampToValueAtTime(0.065,time+0.035);
+   gain.gain.exponentialRampToValueAtTime(0.0001,time+0.70);
+   osc.start(time);osc.stop(time+0.72)
+  }
+ }catch(e){}
+}
 function touch(){lastActivity=new Date().getTime()}
 function hideSlideshowControls(){if(navTimer){clearTimeout(navTimer);navTimer=null}el("stage").classList.add("navHidden")}
 function revealSlideshowControls(){
@@ -361,7 +394,7 @@ el("closeGallery").onclick=showHome;
 el("closeViewer").onclick=function(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;mode="gallery";visible("viewer",false)};
 el("sleep").onclick=function(){touch();mode="sleep";visible("dark",true)};
 el("dark").onclick=function(){touch();mode="slideshow";visible("dark",false)};
-document.addEventListener("touchstart",touch,false);document.addEventListener("click",touch,false);
+document.addEventListener("touchstart",function(){enableChime();touch()},false);document.addEventListener("click",function(){enableChime();touch()},false);
 try{var stored=JSON.parse(localStorage.getItem("mamie_session")||"null");if(stored&&stored.access&&stored.refresh){access=stored.access;refresh=stored.refresh;expiry=stored.expiry||0;authReady(function(ok){if(ok)start()})}else visible("login",true)}catch(e){visible("login",true)}
 })();
 </script></body></html>
