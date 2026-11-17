@@ -21,8 +21,8 @@
 #viewerFavorite{position:absolute;z-index:5;top:12px;right:14px;font-size:25px;background:#f6eee6;color:#473832;border:0;border-radius:10px;padding:11px 18px}
 #gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewer img,#viewer video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:74px;left:3%;width:94%;z-index:4;background:rgba(35,29,27,.96);padding:12px 8px 6px;border-radius:20px;text-align:center}
  #viewerReactions{position:absolute;bottom:55px;left:3%;width:94%;z-index:4;text-align:center}
- .reactionChoices{width:100%;display:-webkit-box;display:-webkit-flex;display:flex}
- .reactionChoices button{display:block;-webkit-box-flex:1;-webkit-flex:1;flex:1;width:30%;min-width:0;margin:0 5px;padding:16px 5px 15px;border:3px solid transparent;border-radius:19px;background:#554844;color:#fff;font-family:Arial,sans-serif;line-height:1.15;text-align:center}
+ .reactionChoices{width:100%;font-size:0;text-align:center;white-space:nowrap}
+ .reactionChoices button{display:inline-block;vertical-align:top;width:30%;margin:0 1.5%;padding:16px 2px 15px;border:3px solid transparent;border-radius:19px;background:#554844;color:#fff;font-family:Arial,sans-serif;line-height:1.15;text-align:center;white-space:normal}
  .reactionChoices button.selected{background:#9b655e;border-color:#e7c7bc}
  .reactionChoices .reactionEmoji{display:block;font-size:36px;margin-bottom:12px;height:43px;line-height:43px}.reactionChoices .reactionEmoji img{display:block;width:43px;height:43px;margin:0 auto}
  .reactionChoices .reactionLabel{display:block;font-size:20px;font-weight:600}
@@ -159,11 +159,11 @@ function loadReactions(){request("GET","/rest/v1/reactions_mamie?select=souvenir
 function renderReactionButtons(item,target){
  var panel=el(target);while(panel.firstChild)panel.removeChild(panel.firstChild);
  if(!item)return;
- var choices=[{emoji:"❤️",label:"J'adore"},{emoji:"😂",label:"Rigolo"},{emoji:"😘",label:"Bisous"}],selected=reactionMap[item.id]||"";
+ var choices=[{emoji:"❤️",label:"J'adore",image:"../assets/reaction-heart.svg"},{emoji:"😂",label:"Rigolo",image:"../assets/reaction-rigolo.svg"},{emoji:"😘",label:"Bisous",image:"../assets/bisous.svg"}],selected=reactionMap[item.id]||"";
  var row=document.createElement("div");row.className="reactionChoices";
  for(var i=0;i<choices.length;i++){(function(choice){
  var btn=document.createElement("button");btn.type="button";btn.title=choice.label;btn.className=(selected===choice.emoji||(choice.emoji==="😘"&&(selected==="🥰"||selected==="😍")))?"selected":"";
- var symbol=document.createElement("span");symbol.className="reactionEmoji";symbol.textContent=choice.emoji;
+ var symbol=document.createElement("span");symbol.className="reactionEmoji";var reactionImg=document.createElement("img");reactionImg.src=choice.image;reactionImg.alt=choice.label;symbol.appendChild(reactionImg);
  var caption=document.createElement("span");caption.className="reactionLabel";caption.textContent=choice.label;
  btn.appendChild(symbol);btn.appendChild(caption);
  btn.onclick=function(){touch();saveReaction(item,choice.emoji)};
