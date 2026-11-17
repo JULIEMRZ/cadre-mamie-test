@@ -213,7 +213,7 @@ function renderGallery(){
  if(sort==="folders"){
   var groups=[],names={};
   for(var fi=0;fi<filtered.length;fi++){
-   var mem=filtered[fi],name=(mem.prenom||"Sans prénom").replace(/^\\s+|\\s+$/g,"")||"Sans prénom",key=name.toLowerCase();
+   var mem=filtered[fi],name=(mem.prenom||"Sans prénom").replace(/^\s+|\s+$/g,"")||"Sans prénom",key=name.toLowerCase();
    if(!names[key]){names[key]={key:key,name:name,memories:[]};groups.push(names[key])}
    names[key].memories.push(mem)
   }
