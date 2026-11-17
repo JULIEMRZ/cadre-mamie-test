@@ -19,12 +19,15 @@
 .favoriteTile{position:absolute;right:6px;top:6px;background:rgba(255,255,255,.92);color:#8c6d67;border:0;border-radius:9px;font-size:27px;padding:5px 9px}
 .favoriteTile.isFavorite{color:#c48735}
 #viewerFavorite{position:absolute;z-index:5;top:12px;right:14px;font-size:25px;background:#f6eee6;color:#473832;border:0;border-radius:10px;padding:11px 18px}
-#gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewer img,#viewer video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:75px;left:50%;z-index:4;transform:translateX(-50%);-webkit-transform:translateX(-50%);white-space:nowrap;background:rgba(35,26,25,.92);padding:10px;border-radius:16px}
- #reactPanel button,#viewerReactions button{border:2px solid transparent;border-radius:13px;background:#f6eee6;font-size:30px;margin:0 3px;padding:8px 12px}
- #reactPanel button.selected,#viewerReactions button.selected{border-color:#b86d60;background:#f2c9c0}
+#gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewer img,#viewer video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:74px;left:3%;width:94%;z-index:4;background:rgba(35,29,27,.96);padding:12px 8px 6px;border-radius:20px;text-align:center}
+ #viewerReactions{position:absolute;bottom:55px;left:3%;width:94%;z-index:4;text-align:center}
+ .reactionChoices{width:100%;display:-webkit-box;display:-webkit-flex;display:flex}
+ .reactionChoices button{display:block;-webkit-box-flex:1;-webkit-flex:1;flex:1;width:30%;min-width:0;margin:0 5px;padding:16px 5px 15px;border:3px solid transparent;border-radius:19px;background:#554844;color:#fff;font-family:Arial,sans-serif;line-height:1.15;text-align:center}
+ .reactionChoices button.selected{background:#9b655e;border-color:#e7c7bc}
+ .reactionChoices .reactionEmoji{display:block;font-size:36px;margin-bottom:12px}
+ .reactionChoices .reactionLabel{display:block;font-size:20px;font-weight:600}
  #reactHint{position:absolute;bottom:65px;right:14px;z-index:3;background:rgba(35,26,25,.68);padding:8px;border-radius:10px;font-size:15px}
- #viewerReactions{position:absolute;bottom:55px;left:0;width:100%;z-index:4}
- #reactStatus{font-size:14px;min-height:16px}
+ #reactStatus{font-size:15px;min-height:17px;color:#fff;margin-top:5px}
  #dark{display:none;position:absolute;z-index:10;top:0;left:0;width:100%;height:100%;background:#000;color:#666;text-align:center}#dark span{position:absolute;bottom:18px;left:0;right:0;font-size:16px}#status{position:absolute;z-index:2;bottom:10px;right:12px;color:#bbb;font-size:12px} @media(max-width:650px){.tile{width:48%}#tools button{font-size:17px;padding:10px}#login h1{font-size:32px}} 
 </style></head><body>
 <div id="login"><h1>Les souvenirs de Mamie ❤️</h1><p>Première connexion au cadre</p><input id="email" type="email" placeholder="Adresse e-mail"><input id="password" type="password" placeholder="Mot de passe"><button id="connect">Afficher les souvenirs</button><p id="error"></p><p>La connexion sera conservée sur cet iPad.</p></div>
@@ -156,12 +159,17 @@ function loadReactions(){request("GET","/rest/v1/reactions_mamie?select=souvenir
 function renderReactionButtons(item,target){
  var panel=el(target);while(panel.firstChild)panel.removeChild(panel.firstChild);
  if(!item)return;
- var choices=["❤️","😂","🥰","😮"],selected=reactionMap[item.id]||"";
- for(var i=0;i<choices.length;i++){(function(emoji){
- var btn=document.createElement("button");btn.type="button";btn.textContent=emoji;btn.title="Réagir "+emoji;btn.className=selected===emoji?"selected":"";
- btn.onclick=function(){touch();saveReaction(item,emoji)};
- panel.appendChild(btn)
+ var choices=[{emoji:"❤️",label:"J'adore"},{emoji:"😂",label:"Rigolo"},{emoji:"🥰",label:"Trop mignon"}],selected=reactionMap[item.id]||"";
+ var row=document.createElement("div");row.className="reactionChoices";
+ for(var i=0;i<choices.length;i++){(function(choice){
+ var btn=document.createElement("button");btn.type="button";btn.title=choice.label;btn.className=selected===choice.emoji?"selected":"";
+ var symbol=document.createElement("span");symbol.className="reactionEmoji";symbol.textContent=choice.emoji;
+ var caption=document.createElement("span");caption.className="reactionLabel";caption.textContent=choice.label;
+ btn.appendChild(symbol);btn.appendChild(caption);
+ btn.onclick=function(){touch();saveReaction(item,choice.emoji)};
+ row.appendChild(btn)
  })(choices[i])}
+ panel.appendChild(row);
  if(target==="reactPanel"){var status=document.createElement("div");status.id="reactStatus";panel.appendChild(status)}
 }
 function saveReaction(item,emoji){
