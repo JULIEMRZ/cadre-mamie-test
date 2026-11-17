@@ -1,0 +1,361 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="Cadre Mamie"><link rel="apple-touch-icon" sizes="76x76" href="../cadre-mamie-coeur/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="152x152" href="../cadre-mamie-coeur/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="../cadre-mamie-coeur/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="../cadre-mamie-coeur/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" href="../cadre-mamie-coeur/apple-touch-icon-152x152.png"><link rel="shortcut icon" href="../cadre-mamie-coeur/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><title>Les souvenirs de Mamie</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#171514;color:#fff;font-family:Arial,sans-serif}button,input{font-family:Arial,sans-serif}button{cursor:pointer}#login{position:absolute;z-index:12;top:0;left:0;right:0;bottom:0;background:#f6eee6;color:#453630;padding:12% 8%;text-align:center}#login h1{font:normal 42px Georgia,serif}#login input{display:block;width:85%;max-width:420px;margin:15px auto;padding:15px;font-size:21px;border:1px solid #bbb;border-radius:9px}#login button{background:#9b655e;border:0;color:#fff;padding:15px 26px;border-radius:9px;font-size:20px}#error{color:#9b2929;font-size:17px}#stage{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;background:#151312;text-align:center}#photo{display:none;position:absolute;width:100%;height:100%;left:0;top:0;object-fit:contain}#photo.fallback{width:auto;height:auto;max-height:100%;max-width:100%;top:50%;left:50%;transform:translate(-50%,-50%)}#empty{position:absolute;top:40%;left:5%;width:90%;font:normal 32px Georgia,serif;color:#eee}#info{position:absolute;bottom:0;left:0;right:0;padding:38px 20px 19px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-size:20px;text-shadow:0 1px 2px #000}#badge{position:absolute;top:16px;right:16px;background:#9b655e;border-radius:30px;padding:12px 18px;font-size:17px;display:none}#tools{position:absolute;z-index:3;left:18px;top:16px}#previous,#next{position:absolute;z-index:3;top:44%;width:62px;height:76px;border:0;border-radius:14px;background:rgba(20,18,17,.57);color:white;font-size:46px;line-height:60px;text-align:center}#previous{left:12px}#next{right:12px}#badge{display:none;position:absolute;z-index:9;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.70);text-align:center}
+ #noticeCard{position:absolute;left:50%;top:50%;width:82%;max-width:470px;padding:30px 18px;background:#f7eee6;color:#45342f;border-radius:24px;text-align:center;transform:translate(-50%,-50%);-webkit-transform:translate(-50%,-50%);box-shadow:0 10px 40px rgba(0,0,0,.38)}
+ #noticeCard .heart{font-size:55px;margin:0 0 12px}
+ #noticeText{font:normal 29px Georgia,serif;line-height:1.25;margin:0 0 22px}
+ #noticeCard button{font-size:23px;font-weight:bold;padding:15px 21px;min-width:125px;border-radius:12px;border:0;margin:5px}
+ #noticeSee{background:#9b655e;color:white}
+ #noticeLater{background:#e4d6ca;color:#45342f}#tools button,.back{border:0;border-radius:10px;background:rgba(40,36,34,.85);color:#fff;font-size:19px;padding:13px 17px;margin-right:9px}#home{display:none;position:absolute;z-index:6;top:0;left:0;width:100%;height:100%;background:#f6eee6;color:#48372f;text-align:center}
+#homeContent{position:absolute;left:0;top:50%;width:100%;transform:translateY(-50%);-webkit-transform:translateY(-50%);padding:20px}
+#home h1{font:normal 46px Georgia,serif;margin:0 0 42px}
+#homeButtons{width:94%;max-width:820px;margin:0 auto;display:-webkit-box;display:-webkit-flex;display:flex;gap:16px}#homeButtons button{display:block;-webkit-box-flex:1;-webkit-flex:1;flex:1;min-width:0;margin:0 8px;border:0;background:#9b655e;color:white;border-radius:20px;font-size:32px;padding:30px 12px}
+#home p{font-size:19px;color:#76665f}
+#galleryControls{margin:10px 0 20px;font-size:20px;text-align:right}
+#galleryControls label{display:inline-block;margin-right:12px}
+#galleryControls select,#galleryControls button{font-size:21px;padding:12px;border:1px solid #bbaaa1;border-radius:12px;background:white;color:#473832;margin:5px}
+#galleryControls button.active{background:#9b655e;color:white}
+.senderFolder{clear:both;margin:15px 0;background:#fff;border:1px solid #e2d4ca;border-radius:16px;overflow:hidden}.senderFolderButton{display:block;width:100%;background:#fff;color:#473832;border:0;padding:20px 18px;text-align:left;font-size:23px;font-weight:bold}.senderFolderButton .folderCount{float:right;font-size:17px;font-weight:normal;color:#8b766b;margin-top:5px}.senderFolderBody{padding:10px 8px 17px;background:#fbf5f0}.senderFolderBody:after{content:"";display:block;clear:both}.senderFolderBody .tile{width:23%;margin:1%}.senderFolderButton.open{background:#f0dfd6}#moreGallery{font-size:22px;background:#9b655e;color:white;border:0;border-radius:12px;padding:14px 28px;margin:22px auto;display:none}
+.tile{position:relative}
+.favoriteTile{position:absolute;right:6px;top:6px;background:rgba(255,255,255,.92);color:#8c6d67;border:0;border-radius:9px;font-size:27px;padding:5px 9px}
+.favoriteTile.isFavorite{color:#c48735}
+#viewerFavorite{position:absolute;z-index:5;top:12px;right:14px;font-size:25px;background:#f6eee6;color:#473832;border:0;border-radius:10px;padding:11px 18px}
+#gallery{display:none;position:absolute;z-index:5;left:0;top:0;right:0;bottom:0;background:#f6eee6;color:#473832;overflow:auto;-webkit-overflow-scrolling:touch;padding:20px}#gallery h1{font:normal 34px Georgia,serif;margin:12px 0 20px}#gallery .back{background:#9b655e}#grid:after{content:"";display:block;clear:both}.tile{width:23%;margin:1%;float:left;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #d8ccc5;min-height:135px}.tile img{display:block;width:100%;height:125px;object-fit:cover;background:#d9d1cc}.tile .label{padding:8px;font-size:14px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .play{position:relative;margin-top:-125px;height:125px;background:rgba(0,0,0,.25);color:white;text-align:center;padding-top:41px;font-size:43px}#viewer{display:none;position:absolute;z-index:7;top:0;left:0;width:100%;height:100%;background:#121010;color:#fff;text-align:center}#viewer .back{position:absolute;top:12px;left:12px;z-index:3}#viewerContent>img,#viewerContent>video{max-width:98%;max-height:78%;position:absolute;top:9%;left:50%;transform:translateX(-50%)}#viewer .caption{position:absolute;bottom:12px;width:90%;left:5%;font-size:20px}#reactPanel{display:none;position:absolute;bottom:74px;left:3%;width:94%;z-index:4;background:rgba(35,29,27,.96);padding:12px 8px 6px;border-radius:20px;text-align:center}
+ #viewerReactions{position:absolute;bottom:55px;left:3%;width:94%;z-index:4;text-align:center}
+ .reactionChoices{width:100%;font-size:0;text-align:center;white-space:nowrap}
+ .reactionChoices button{display:inline-block;vertical-align:top;width:30%;margin:0 1.5%;padding:16px 2px 15px;border:3px solid transparent;border-radius:19px;background:#554844;color:#fff;font-family:Arial,sans-serif;line-height:1.15;text-align:center;white-space:normal}
+ .reactionChoices button.selected{background:#9b655e;border-color:#e7c7bc}
+ .reactionChoices .reactionEmoji{display:block;font-size:36px;margin-bottom:12px;height:43px;line-height:43px}.reactionChoices .reactionEmoji svg{display:block;width:43px;height:43px;margin:0 auto}
+ .reactionChoices .reactionLabel{display:block;font-size:20px;font-weight:600}
+ #reactHint{position:absolute;bottom:65px;right:14px;z-index:3;background:rgba(35,26,25,.68);padding:8px;border-radius:10px;font-size:15px}
+ #reactStatus{font-size:15px;min-height:17px;color:#fff;margin-top:5px}
+ #dark{display:none;position:absolute;z-index:10;top:0;left:0;width:100%;height:100%;background:#000;color:#666;text-align:center}#dark span{position:absolute;bottom:18px;left:0;right:0;font-size:16px}#status{position:absolute;z-index:2;bottom:10px;right:12px;color:#bbb;font-size:12px} @media(max-width:650px){.tile{width:48%}#tools button{font-size:17px;padding:10px}#login h1{font-size:32px}} 
+/* Slideshow dashboard: split-screen in landscape on the old iPad. */
+#todayWidget{position:absolute;top:16px;right:16px;z-index:2;width:225px;max-width:48%;padding:17px 12px;border-radius:17px;background:rgba(27,26,27,.82);color:#fff;text-align:center;text-shadow:0 1px 2px #151515;cursor:pointer}
+#todayTime{font-size:45px;font-weight:bold;line-height:1.12}
+#todayDate{font-size:19px;margin:12px 0 19px;text-transform:capitalize}
+#todayCity{font-size:18px;font-weight:bold;margin-bottom:8px}
+#todayWeather{font-size:21px;line-height:1.5}
+#todayCredit{font-size:11px;opacity:.8;margin-top:22px}
+@media screen and (orientation:landscape) and (min-width:700px){
+ #stage{background:#181717}
+ #stage #photo{width:50%;left:0;top:0;height:100%;object-fit:contain}
+ #stage #photo.fallback{left:25%;max-width:50%;width:auto;height:auto}
+ #todayWidget{top:0;right:0;width:50%;max-width:none;height:100%;border-radius:0;padding:17% 4% 3%;background:#ede3dd;color:#4d3c36;text-shadow:none}
+ #todayTime{font-size:69px}
+ #todayDate{font-size:28px;margin:16px 0 32px}
+ #todayCity{font-size:25px;margin-bottom:18px}
+ #todayWeather{font-size:27px}
+ #todayCredit{font-size:13px;opacity:.65;margin-top:40px}
+ #stage #info{right:auto;width:50%}
+ #stage #reactPanel{left:1%;width:48%;bottom:78px}
+ #stage #reactHint{right:52%;bottom:70px}
+ #stage #next{right:50%;margin-right:12px}
+ #stage #badge{width:100%}
+}
+@media screen and (max-width:699px){#todayWidget{top:9px;right:8px;width:165px;padding:9px 7px}#todayTime{font-size:29px}#todayDate,#todayCity{font-size:14px;margin:5px}#todayWeather{font-size:15px}#todayCredit{font-size:9px;margin-top:8px}}
+</style></head><body>
+<div id="login"><h1>Les souvenirs de Mamie ❤️</h1><p>Première connexion au cadre</p><input id="email" type="email" placeholder="Adresse e-mail"><input id="password" type="password" placeholder="Mot de passe"><button id="connect">Afficher les souvenirs</button><p id="error"></p><p>La connexion sera conservée sur cet iPad.</p></div>
+<div id="stage"><img id="photo" alt="Souvenir familial"><div id="todayWidget"><div id="todayTime">--:--</div><div id="todayDate"></div><div id="todayCity">Antibes</div><div id="todayWeather">Chargement de la météo…</div><div id="todayCredit">Météo : Open-Meteo · toucher pour localiser</div></div><div id="empty">Chargement des souvenirs…</div><div id="info"></div><div id="reactHint">Touchez la photo pour réagir ❤️</div><div id="reactPanel"></div><div id="badge" role="dialog" aria-label="Nouveau souvenir"><div id="noticeCard"><div class="heart">❤️</div><div id="noticeText">Vous avez reçu une nouvelle photo !</div><button type="button" id="noticeSee">Voir</button><button type="button" id="noticeLater">Plus tard</button></div></div><button id="previous" type="button" aria-label="Photo précédente">‹</button><button id="next" type="button" aria-label="Photo suivante">›</button><div id="tools"><button id="openHome" type="button">⌂ Accueil</button><button id="openGallery">☷ Galerie</button><button id="sleep" type="button" aria-label="Mettre en veille" title="Mettre en veille">☾</button></div><div id="status"></div></div>
+<div id="home"><div id="homeContent"><h1>Les souvenirs de Mamie ❤️</h1><div id="homeButtons"><button type="button" id="homeGallery">🖼 Galerie</button><button type="button" id="homeSlideshow">▶ Diaporama</button></div><p>Le diaporama démarre automatiquement après 3 minutes.</p></div></div>
+<div id="gallery"><button class="back" id="closeGallery">← Accueil</button><h1>Nos souvenirs ❤️</h1><div id="galleryControls"><label for="gallerySort">Trier par :</label><select id="gallerySort"><option value="newest">Date · plus récentes</option><option value="oldest">Date · plus anciennes</option><option value="sender">Expéditeur · A à Z</option><option value="folders">📁 Dossiers par expéditeur</option></select><button type="button" id="favoriteFilter">☆ Mes favoris</button></div><div id="grid"></div><button type="button" id="moreGallery">Voir plus de souvenirs</button></div>
+<div id="viewer"><button class="back" id="closeViewer">← Galerie</button><button type="button" id="viewerFavorite">☆ Favori</button><div id="viewerContent"></div><div id="viewerReactions"></div><div id="viewerCaption" class="caption"></div></div>
+<div id="dark"><span>Toucher pour rallumer</span></div>
+<script>
+(function(){
+"use strict";
+var BASE="https://rqzqudoiqlqjpzvmvlwq.supabase.co", KEY="sb_publishable_kjnfYZwCw5guEnFuucq5Qg_9N4WYcrM";
+var access="",refresh="",expiry=0,items=[],current=0,lastActivity=new Date().getTime(),lastCount=-1,lastGalleryRender=0,seenIds={},initialized=false,latestNewItem=null,manualUntil=0,mode="slideshow",activeVideo=null,loading=false,signedCache={},signing={},loadedCache={},showSequence=0,galleryDirty=true,cadreId=null,reactionMap={},viewerItem=null,favoriteMap={},galleryFavoritesOnly=false,galleryShown=36,senderFolderOpen="",homeTimer=null;
+function el(id){return document.getElementById(id)}
+function visible(id,yes){el(id).style.display=yes?"block":"none"}
+function text(id,s){el(id).textContent=s||""}
+function request(method,path,data,authorized,done){
+ var x=new XMLHttpRequest();x.open(method,BASE+path,true);x.setRequestHeader("apikey",KEY);x.setRequestHeader("Accept","application/json");if(data!==null)x.setRequestHeader("Content-Type","application/json");if(authorized)x.setRequestHeader("Authorization","Bearer "+access);if(method==="POST"&&path.indexOf("/rest/v1/reactions_mamie")===0)x.setRequestHeader("Prefer","resolution=merge-duplicates,return=representation");
+ x.onreadystatechange=function(){if(x.readyState!==4)return;var result=null;try{result=JSON.parse(x.responseText)}catch(e){}done(x.status,result)};
+ x.onerror=function(){done(0,null)};x.send(data===null?null:JSON.stringify(data));
+}
+function save(){try{localStorage.setItem("mamie_session",JSON.stringify({access:access,refresh:refresh,expiry:expiry}))}catch(e){}}
+function clear(){access="";refresh="";expiry=0;try{localStorage.removeItem("mamie_session")}catch(e){}}
+function setTokens(r){if(!r||!r.access_token)return false;access=r.access_token;refresh=r.refresh_token||refresh;expiry=new Date().getTime()+((r.expires_in||3600)*1000);save();return true}
+function authReady(done){if(!access){done(false);return}if(new Date().getTime()<expiry-120000){done(true);return}if(!refresh){done(false);return}
+ request("POST","/auth/v1/token?grant_type=refresh_token",{refresh_token:refresh},false,function(code,r){if(code===200&&setTokens(r)){done(true)}else{clear();visible("login",true);text("error","Session expirée. Reconnectez-vous.");done(false)}})}
+function scheduleHome(){if(homeTimer)clearTimeout(homeTimer);homeTimer=setTimeout(function(){if(mode==="home")showSlideshow()},180000)}
+function showHome(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;viewerItem=null;mode="home";visible("gallery",false);visible("viewer",false);visible("reactPanel",false);visible("home",true);scheduleHome()}
+function showSlideshow(){if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="slideshow";visible("home",false);visible("gallery",false);visible("viewer",false);visible("reactPanel",false);if(items.length)showPhoto(current)}
+function showGallery(){touch();if(homeTimer){clearTimeout(homeTimer);homeTimer=null}mode="gallery";visible("home",false);visible("viewer",false);visible("gallery",true);galleryShown=36;renderGallery()}
+var weatherPosition={latitude:43.7102,longitude:7.2620,city:"Nice"},weatherLastFetch=0;
+function updateToday(){
+ var now=new Date(),days=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],months=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+ text("todayTime",("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2));
+ text("todayDate",days[now.getDay()]+" "+now.getDate()+" "+months[now.getMonth()]);
+}
+function weatherDescription(code){
+ if(code===0)return "☀ Ciel dégagé";
+ if(code===1||code===2)return "⛅ Éclaircies";
+ if(code===3)return "☁ Nuageux";
+ if(code===45||code===48)return "☁ Brouillard";
+ if(code===51||code===53||code===55||code===56||code===57)return "☂ Bruine";
+ if(code===61||code===63||code===65||code===66||code===67||code===80||code===81||code===82)return "☂ Pluie";
+ if(code===71||code===73||code===75||code===77||code===85||code===86)return "❄ Neige";
+ if(code===95||code===96||code===99)return "☂ Orage";
+ return "☁ Météo";
+}
+function updateWeather(force){
+ if(!force&&new Date().getTime()-weatherLastFetch<1800000)return;
+ weatherLastFetch=new Date().getTime();
+ text("todayCity",weatherPosition.city);
+ text("todayWeather","Chargement de la météo…");
+ authReady(function(ok){
+  if(!ok){text("todayWeather","Météo en attente de connexion");weatherLastFetch=0;return}
+  var xhr=new XMLHttpRequest();
+  var weatherUrl=BASE+"/functions/v1/meteo-cadre-mamie?latitude="+encodeURIComponent(weatherPosition.latitude)+"&longitude="+encodeURIComponent(weatherPosition.longitude);
+  xhr.open("GET",weatherUrl,true);
+  xhr.setRequestHeader("Authorization","Bearer "+access);
+  xhr.setRequestHeader("apikey",KEY);
+  xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;
+   try{
+    if(xhr.status!==200)throw new Error("Météo indisponible");
+    var weather=JSON.parse(xhr.responseText);
+    if(typeof weather.temperature!=="number"||typeof weather.code!=="number")throw new Error("Météo indisponible");
+    text("todayWeather",weatherDescription(weather.code)+" · "+Math.round(weather.temperature)+" °C")
+   }catch(error){text("todayWeather","Météo momentanément indisponible");weatherLastFetch=0}
+  };
+  xhr.onerror=function(){text("todayWeather","Météo momentanément indisponible");weatherLastFetch=0};
+  xhr.send(null)
+ })
+}
+function chooseWeatherLocation(){
+ if(!navigator.geolocation){text("todayWeather","Localisation indisponible");return}
+ text("todayWeather","Recherche de la météo locale…");
+ navigator.geolocation.getCurrentPosition(function(position){
+  weatherPosition={latitude:position.coords.latitude,longitude:position.coords.longitude,city:"Près de Mamie"};
+  updateWeather(true)
+ },function(){text("todayWeather","Localisation refusée · météo à Nice");weatherPosition={latitude:43.7102,longitude:7.2620,city:"Nice"};updateWeather(true)},{enableHighAccuracy:false,timeout:12000,maximumAge:3600000})
+}
+function start(){visible("login",false);updateToday();updateWeather(true);setInterval(updateToday,30000);setInterval(function(){updateWeather(false)},1800000);showHome();reload();setInterval(function(){if(mode==="slideshow"&&items.length>1&&new Date().getTime()>manualUntil)advance()},11000);setInterval(function(){reload()},60000);setInterval(function(){if((mode==="gallery"||mode==="viewer")&&new Date().getTime()-lastActivity>300000){if(activeVideo&&!activeVideo.paused&&!activeVideo.ended)return;closeAll()}},15000)}
+function login(){text("error","Connexion…");var email=el("email").value,password=el("password").value;request("POST","/auth/v1/token?grant_type=password",{email:email,password:password},false,function(code,r){if(code===200&&setTokens(r)){text("error","");start()}else{text("error","Connexion impossible. Vérifiez vos identifiants et les autorisations.")}})}
+el("connect").onclick=login;
+function reload(){if(loading)return;loading=true;authReady(function(ok){if(!ok){loading=false;return}request("GET","/rest/v1/cadres_autorises?select=user_id%2Cnom&limit=1",null,true,function(code,m){if(code!==200||!m||!m.length){loading=false;visible("login",true);text("error","Ce compte doit être autorisé comme cadre pour accéder à l'album.");return}
+cadreId=m[0].user_id;loadReactions();loadFavorites();request("GET","/rest/v1/souvenirs?select=id%2Ctype_media%2Cfichier_path%2Cprenom%2Cmessage%2Ccreated_at&order=created_at.desc&limit=200",null,true,function(code,data){loading=false;if(code!==200||!data||!data.length&&code!==200){text("status","Connexion difficile. Nouvel essai bientôt.");return}
+var oldFirst=items.length?items[0].id:"",same=items.length===data.length&&oldFirst===(data.length?data[0].id:"");items=data;
+if(initialized){
+ var added=[];
+ for(var ni=0;ni<data.length;ni++){if(!seenIds[data[ni].id])added.push(data[ni])}
+ if(added.length){
+  var photos=0,videos=0;
+  for(var ai=0;ai<added.length;ai++){if(added[ai].type_media==="video")videos++;else photos++}
+  var sender=added[0].prenom||"Quelqu'un",oneSender=true;
+  for(var pi=1;pi<added.length;pi++){if((added[pi].prenom||"Quelqu'un")!==sender){oneSender=false;break}}
+  var who=oneSender?sender:"Votre famille";
+  var message=photos&&videos?who+" vous a envoyé "+photos+" photo"+(photos>1?"s":"")+" et "+videos+" vidéo"+(videos>1?"s":"")+" !":videos?who+" vous a envoyé "+(videos===1?"une nouvelle vidéo !":videos+" nouvelles vidéos !"):who+" vous a envoyé "+(photos===1?"une nouvelle photo !":photos+" nouvelles photos !");
+  text("noticeText",message);latestNewItem=added[0];visible("badge",true)
+ }
+}
+for(var si=0;si<data.length;si++)seenIds[data[si].id]=true;
+initialized=true;
+lastCount=data.length;if(!same){galleryDirty=true}if(!same||!el("photo").getAttribute("src"))showPhoto(current);
+if(!items.length){text("empty","Les premiers souvenirs arrivent bientôt ❤️");visible("empty",true)}
+})})})}
+// Cache the signed URL while it is valid; avoid an extra network request on every slide.
+function signed(path,done){
+ var cached=signedCache[path],now=new Date().getTime();
+ if(cached&&cached.until>now){done(cached.url);return}
+ if(signing[path]){signing[path].push(done);return}
+ signing[path]=[done];
+ authReady(function(ok){if(!ok){finish(null);return}
+ var safe=path.split("/").map(function(s){return encodeURIComponent(s)}).join("/");
+ request("POST","/storage/v1/object/sign/souvenirs-famille/"+safe,{expiresIn:3600},true,function(code,r){
+  var u=null;
+  if(code===200&&r&&r.signedURL){u=r.signedURL.indexOf("http")===0?r.signedURL:BASE+"/storage/v1"+r.signedURL;signedCache[path]={url:u,until:new Date().getTime()+3000000}}
+  finish(u)
+ });
+ });
+ function finish(url){var callbacks=signing[path]||[];delete signing[path];for(var j=0;j<callbacks.length;j++)callbacks[j](url)}
+}
+function nextPhotoIndex(index){
+ if(!items.length)return -1;
+ for(var j=1;j<=items.length;j++){var k=(index+j)%items.length;if(items[k].type_media==="photo")return k}
+ return -1
+}
+function preloadNext(index){
+ if(items.length<2)return;
+ var next=nextPhotoIndex(index);
+ if(next<0||next===index)return;
+ var path=items[next].fichier_path;
+ if(loadedCache[path])return;
+ signed(path,function(src){
+  if(!src||loadedCache[path])return;
+  var pre=new Image();loadedCache[path]=pre;
+  pre.onload=function(){loadedCache[path]=pre};
+  pre.onerror=function(){delete loadedCache[path]};
+  pre.src=src;
+  // Old iPads have limited memory: keep only the current and next preloaded image.
+  for(var key in loadedCache){if(loadedCache.hasOwnProperty(key)&&key!==path&&key!==items[index].fichier_path)delete loadedCache[key]}
+ })
+}
+function showPhoto(index){
+ if(!items.length)return;
+ var attempts=0;
+ while(attempts<items.length&&items[index%items.length].type_media!=="photo"){index++;attempts++}
+ if(attempts>=items.length){visible("photo",false);visible("empty",true);text("empty","Les vidéos sont disponibles dans la galerie ❤️");return}
+ current=index%items.length;
+ var item=items[current],sequence=++showSequence;renderReactionButtons(item,"reactPanel");
+ signed(item.fichier_path,function(src){
+  if(!src||sequence!==showSequence)return;
+  var photo=el("photo");
+  // For a single image, display directly without waiting for a second Image object.
+  if(items.length===1){photo.src=src;visible("photo",true);visible("empty",false);text("info",item.prenom+(item.message?" — "+item.message:""));return}
+  if(photo.getAttribute("src")===src&&photo.complete){visible("photo",true);visible("empty",false);preloadNext(current);return}
+  // Keep the previous image visible until the new image has fully loaded.
+  var picture=new Image();
+  picture.onload=function(){
+   if(sequence!==showSequence)return;
+   photo.src=src;visible("photo",true);visible("empty",false);
+   text("info",item.prenom+(item.message?" — "+item.message:""));
+   preloadNext(current)
+  };
+  picture.onerror=function(){if(sequence===showSequence)text("status","Chargement de la photo impossible.")};
+  picture.src=src
+ })
+}
+function previousPhotoIndex(index){
+ if(!items.length)return -1;
+ for(var j=1;j<=items.length;j++){var k=(index-j+items.length)%items.length;if(items[k].type_media==="photo")return k}
+ return -1
+}
+function changePhoto(direction){
+ touch();manualUntil=new Date().getTime()+22000;
+ var index=direction>0?nextPhotoIndex(current):previousPhotoIndex(current);
+ if(index>=0)showPhoto(index)
+}
+function advance(){if(mode!=="slideshow")return;var index=nextPhotoIndex(current);if(index>=0)showPhoto(index)}
+function loadReactions(){request("GET","/rest/v1/reactions_mamie?select=souvenir_id%2Cemoji",null,true,function(code,data){if(code!==200||!data)return;reactionMap={};for(var i=0;i<data.length;i++)reactionMap[data[i].souvenir_id]=data[i].emoji;if(items[current])renderReactionButtons(items[current],"reactPanel");if(viewerItem)renderReactionButtons(viewerItem,"viewerReactions")})}
+function renderReactionButtons(item,target){
+ var panel=el(target);while(panel.firstChild)panel.removeChild(panel.firstChild);
+ if(!item)return;
+ var choices=[{emoji:"❤️",label:"J'adore",svg:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 36 36\"><path fill=\"#DD2E44\" d=\"M35.885 11.833c0-5.45-4.418-9.868-9.867-9.868-3.308 0-6.227 1.633-8.018 4.129-1.791-2.496-4.71-4.129-8.017-4.129-5.45 0-9.868 4.417-9.868 9.868 0 .772.098 1.52.266 2.241C1.751 22.587 11.216 31.568 18 34.034c6.783-2.466 16.249-11.447 17.617-19.959.17-.721.268-1.469.268-2.242z\"/></svg>"},{emoji:"😂",label:"Rigolo",svg:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 36 36\"><path fill=\"#FFCC4D\" d=\"M36 18c0 9.941-8.059 18-18 18-9.94 0-18-8.059-18-18C0 8.06 8.06 0 18 0c9.941 0 18 8.06 18 18\"/><path fill=\"#664500\" d=\"M28.457 17.797c-.06-.135-1.499-3.297-4.457-3.297-2.957 0-4.397 3.162-4.457 3.297-.092.207-.032.449.145.591.175.142.426.147.61.014.012-.009 1.262-.902 3.702-.902 2.426 0 3.674.881 3.702.901.088.066.194.099.298.099.11 0 .221-.037.312-.109.177-.142.238-.386.145-.594zm-12 0c-.06-.135-1.499-3.297-4.457-3.297-2.957 0-4.397 3.162-4.457 3.297-.092.207-.032.449.144.591.176.142.427.147.61.014.013-.009 1.262-.902 3.703-.902 2.426 0 3.674.881 3.702.901.088.066.194.099.298.099.11 0 .221-.037.312-.109.178-.142.237-.386.145-.594zM31 16c-.396 0-.772-.238-.929-.629-1.778-4.445-6.223-5.381-6.268-5.391-.541-.108-.893-.635-.784-1.177.108-.542.635-.891 1.177-.784.226.045 5.556 1.168 7.732 6.608.205.513-.045 1.095-.558 1.3-.12.05-.246.073-.37.073zM5 16c-.124 0-.249-.023-.371-.072-.513-.205-.762-.787-.557-1.3 2.176-5.44 7.506-6.563 7.732-6.608.543-.106 1.068.243 1.177.784.108.54-.242 1.066-.781 1.176-.185.038-4.506.98-6.271 5.391-.157.391-.533.629-.929.629zm13 6c-3.623 0-6.027-.422-9-1-.679-.131-2 0-2 2 0 4 4.595 9 11 9 6.404 0 11-5 11-9 0-2-1.321-2.132-2-2-2.973.578-5.377 1-9 1z\"/><path fill=\"#FFF\" d=\"M9 23s3 1 9 1 9-1 9-1-2 4-9 4-9-4-9-4z\"/><path fill=\"#5DADEC\" d=\"M10.847 28.229c-.68 2.677-3.4 4.295-6.077 3.615-2.676-.679-4.295-3.399-3.616-6.076.679-2.677 6.337-8.708 7.307-8.462.97.247 3.065 8.247 2.386 10.923zm14.286 0c.68 2.677 3.4 4.295 6.077 3.615 2.677-.679 4.296-3.399 3.616-6.076-.68-2.677-6.338-8.708-7.308-8.462-.968.247-3.064 8.247-2.385 10.923z\"/></svg>"},{emoji:"😘",label:"Bisous",svg:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 36 36\"><circle fill=\"#FFCC4D\" cx=\"18\" cy=\"18\" r=\"18\"/><ellipse fill=\"#664500\" cx=\"11.5\" cy=\"15.5\" rx=\"2.5\" ry=\"3.5\"/><path fill=\"#664500\" d=\"M28.457 17.797c-.06-.135-1.499-3.297-4.457-3.297-2.957 0-4.397 3.162-4.457 3.297-.092.207-.032.449.145.591.175.142.426.147.61.014.012-.009 1.262-.902 3.702-.902 2.426 0 3.674.881 3.702.901.088.066.194.099.298.099.11 0 .221-.037.312-.109.177-.142.238-.386.145-.594zM5.999 11c-.208 0-.419-.065-.599-.2-.442-.331-.531-.958-.2-1.4C8.462 5.05 12.816 5 13 5c.552 0 1 .448 1 1 0 .551-.445.998-.996 1-.155.002-3.568.086-6.204 3.6-.196.262-.497.4-.801.4zm23.002 3c-.305 0-.604-.138-.801-.4-2.592-3.456-6.961-2.628-7.004-2.62-.547.11-1.068-.244-1.177-.784-.108-.541.243-1.068.784-1.177.231-.047 5.657-1.072 8.996 3.38.332.442.242 1.069-.2 1.4-.179.136-.389.201-.598.201zm-8.922 13.042c1.335-.412 2.629-1.156 2.629-2.5 0-2.619-4.912-2.968-5.472-2.999-.274-.026-.509.193-.527.468-.017.274.19.511.464.53.035.002 3.535.299 3.535 2.001s-3.5 1.999-3.535 2.001c-.014.001-.024.009-.037.011-.052.006-.101.018-.146.04l-.019.011c-.047.026-.088.057-.125.098-.014.015-.024.031-.036.048-.023.032-.044.063-.059.102-.012.029-.018.061-.024.092-.004.023-.016.044-.018.067 0 .011.004.021.004.031s-.005.021-.004.031c.001.024.013.045.018.068.006.031.011.061.023.09.013.03.031.057.049.084.017.024.032.05.052.071.023.023.05.041.078.061.024.017.046.034.074.047.032.015.066.021.101.027.024.006.044.018.069.02.035.002 3.535.299 3.535 2.001s-3.5 1.999-3.535 2.001c-.274.02-.481.257-.464.53.017.265.237.469.499.469l.028-.001c.56-.031 5.472-.38 5.472-2.999 0-1.345-1.294-2.089-2.629-2.501z\"/><path fill=\"#FFAC33\" d=\"M34.202 25.803c-.236-.79-.779-1.486-1.578-1.875-.922-.449-1.956-.391-2.793.06-.16-.936-.75-1.789-1.67-2.237-1.517-.74-3.348-.11-4.087 1.406-.105.215-.18.437-.23.659-.775 2.556.64 6.341 2.192 7.948 1.23.13 2.953-.198 4.513-.873 1.5-1.46 2.733-3.183 3.653-5.088z\"/><path fill=\"#DD2E44\" d=\"M35.654 27.222c.739-1.516.11-3.347-1.405-4.086-.922-.449-1.956-.391-2.793.06-.16-.936-.75-1.789-1.67-2.237-1.517-.74-3.348-.109-4.087 1.406-.105.215-.18.437-.23.659-.774 2.556.64 6.341 2.192 7.948 2.223.234 6.077-.979 7.615-3.161.145-.179.273-.374.378-.589z\"/></svg>"}],selected=reactionMap[item.id]||"";
+ var row=document.createElement("div");row.className="reactionChoices";
+ for(var i=0;i<choices.length;i++){(function(choice){
+ var btn=document.createElement("button");btn.type="button";btn.title=choice.label;btn.className=(selected===choice.emoji||(choice.emoji==="😘"&&(selected==="🥰"||selected==="😍")))?"selected":"";
+ var symbol=document.createElement("span");symbol.className="reactionEmoji";symbol.innerHTML=choice.svg;symbol.setAttribute("aria-label",choice.label);
+ var caption=document.createElement("span");caption.className="reactionLabel";caption.textContent=choice.label;
+ btn.appendChild(symbol);btn.appendChild(caption);
+ btn.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();touch();visible("reactPanel",false);visible("viewerReactions",false);saveReaction(item,choice.emoji)};
+ row.appendChild(btn)
+ })(choices[i])}
+ panel.appendChild(row);
+ if(target==="reactPanel"){var status=document.createElement("div");status.id="reactStatus";panel.appendChild(status)}
+}
+function saveReaction(item,emoji){
+ if(!cadreId)return;
+ authReady(function(ok){if(!ok)return;
+ request("POST","/rest/v1/reactions_mamie?on_conflict=souvenir_id%2Ccadre_id",{souvenir_id:item.id,cadre_id:cadreId,emoji:emoji,updated_at:new Date().toISOString()},true,function(code,result){
+ if(code===200||code===201){reactionMap[item.id]=emoji;if(items[current]&&items[current].id===item.id)renderReactionButtons(item,"reactPanel");if(viewerItem&&viewerItem.id===item.id)renderReactionButtons(item,"viewerReactions");visible("reactPanel",false);visible("viewerReactions",false);}
+ else {var msg=el("reactStatus");if(msg)msg.textContent="Impossible d'envoyer la réaction."}
+ })
+ })
+}
+function loadFavorites(){
+ request("GET","/rest/v1/favoris_mamie?select=souvenir_id%2Ccadre_id",null,true,function(code,data){
+ if(code!==200||!data)return;
+ favoriteMap={};for(var i=0;i<data.length;i++)if(data[i].cadre_id===cadreId)favoriteMap[data[i].souvenir_id]=true;
+ if(mode==="gallery")renderGallery();
+ if(viewerItem)updateViewerFavorite()
+ })
+}
+function toggleFavorite(item,callback){
+ if(!cadreId||!item)return;
+ var was=!!favoriteMap[item.id],method=was?"DELETE":"POST";
+ var path=was?"/rest/v1/favoris_mamie?souvenir_id=eq."+encodeURIComponent(item.id)+"&cadre_id=eq."+encodeURIComponent(cadreId):"/rest/v1/favoris_mamie";
+ authReady(function(ok){if(!ok)return;
+ request(method,path,was?null:{souvenir_id:item.id,cadre_id:cadreId},true,function(code){
+ if(code>=200&&code<300){if(was)delete favoriteMap[item.id];else favoriteMap[item.id]=true;updateViewerFavorite();if(mode==="gallery")renderGallery();if(callback)callback(true)}
+ else if(callback)callback(false)
+ })
+ })
+}
+function updateViewerFavorite(){var b=el("viewerFavorite");if(!viewerItem)return;b.textContent=favoriteMap[viewerItem.id]?"★ Favori":"☆ Favori"}
+function renderGallery(){
+ galleryDirty=false;lastGalleryRender=new Date().getTime();
+ var grid=el("grid");while(grid.firstChild)grid.removeChild(grid.firstChild);
+ var sort=el("gallerySort").value,filtered=[];
+ for(var i=0;i<items.length;i++)if(!galleryFavoritesOnly||favoriteMap[items[i].id])filtered.push(items[i]);
+ filtered.sort(function(a,b){
+ if(sort==="sender"||sort==="folders"){var aa=(a.prenom||"").toLowerCase(),bb=(b.prenom||"").toLowerCase();if(aa<bb)return -1;if(aa>bb)return 1}
+ var x=a.created_at||"",y=b.created_at||"";return sort==="oldest"?(x<y?-1:x>y?1:0):(x>y?-1:x<y?1:0)
+ });
+ if(sort==="folders"){
+  var groups=[],names={};
+  for(var fi=0;fi<filtered.length;fi++){
+   var mem=filtered[fi],name=(mem.prenom||"Sans prénom").replace(/^\s+|\s+$/g,"")||"Sans prénom",key=name.toLowerCase();
+   if(!names[key]){names[key]={key:key,name:name,memories:[]};groups.push(names[key])}
+   names[key].memories.push(mem)
+  }
+  for(var gi=0;gi<groups.length;gi++){(function(group){
+   var wrapper=document.createElement("div");wrapper.className="senderFolder";
+   var header=document.createElement("button");header.type="button";header.className="senderFolderButton"+(senderFolderOpen===group.key?" open":"");
+   header.textContent=(senderFolderOpen===group.key?"📂 ":"📁 ")+group.name;
+   var count=document.createElement("span");count.className="folderCount";count.textContent=group.memories.length+" souvenir"+(group.memories.length>1?"s":"");header.appendChild(count);
+   header.onclick=function(){touch();senderFolderOpen=senderFolderOpen===group.key?"":group.key;renderGallery()};
+   wrapper.appendChild(header);
+   if(senderFolderOpen===group.key){
+    var body=document.createElement("div");body.className="senderFolderBody";
+    for(var mi=0;mi<group.memories.length;mi++)appendMemoryTile(group.memories[mi],body);
+    wrapper.appendChild(body)
+   }
+   grid.appendChild(wrapper)
+  })(groups[gi])}
+  el("moreGallery").style.display="none"
+ }else{
+  var max=Math.min(galleryShown,filtered.length);
+  for(var j=0;j<max;j++)appendMemoryTile(filtered[j],grid);
+  el("moreGallery").style.display=filtered.length>max?"block":"none"
+ }
+ el("favoriteFilter").className=galleryFavoritesOnly?"active":"";
+ el("favoriteFilter").textContent=galleryFavoritesOnly?"★ Tous les souvenirs":"☆ Mes favoris";
+}
+function appendMemoryTile(item,container){
+ var tile=document.createElement("div");tile.className="tile";
+ var img=document.createElement("img");img.alt="Souvenir";tile.appendChild(img);
+ if(item.type_media==="video"){var p=document.createElement("div");p.className="play";p.textContent="▶";tile.appendChild(p)}
+ var label=document.createElement("div");label.className="label";label.textContent=item.prenom+" · "+(item.type_media==="video"?"Vidéo":"Photo");tile.appendChild(label);
+ tile.onclick=function(){openItem(item)};
+ var star=document.createElement("button");star.type="button";star.className="favoriteTile"+(favoriteMap[item.id]?" isFavorite":"");star.textContent=favoriteMap[item.id]?"★":"☆";star.title="Mettre en favori";
+ star.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleFavorite(item)};tile.appendChild(star);
+ container.appendChild(tile);
+ if(item.type_media==="photo"){signed(item.fichier_path,function(u){if(u)img.src=u})}else img.style.background="#8c6d67"
+}
+function openItem(item){mode="viewer";viewerItem=item;activeVideo=null;updateViewerFavorite();renderReactionButtons(item,"viewerReactions");visible("viewerReactions",true);text("viewerCaption",item.prenom+(item.message?" — "+item.message:""));var c=el("viewerContent");while(c.firstChild)c.removeChild(c.firstChild);visible("viewer",true);signed(item.fichier_path,function(u){if(!u)return;var node=document.createElement(item.type_media==="video"?"video":"img");node.src=u;if(item.type_media==="video"){node.controls=true;node.setAttribute("playsinline","");node.preload="metadata";activeVideo=node}else {node.alt="Souvenir";node.onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("viewerReactions")}}c.appendChild(node)})}
+function closeAll(){viewerItem=null;visible("viewerReactions",false);visible("reactPanel",false);if(activeVideo)activeVideo.pause();activeVideo=null;mode="slideshow";visible("gallery",false);visible("viewer",false)}
+function touch(){lastActivity=new Date().getTime()}
+el("todayWidget").onclick=function(){touch();chooseWeatherLocation()};
+el("noticeLater").onclick=function(){touch();latestNewItem=null;visible("badge",false)};
+el("noticeSee").onclick=function(){
+ touch();visible("badge",false);
+ var selected=latestNewItem;latestNewItem=null;
+ if(!selected)return;
+ showGallery();
+ openItem(selected)
+};
+function toggleReactions(id){touch();if(id==="reactPanel")manualUntil=new Date().getTime()+30000;visible(id,el(id).style.display!=="block")}
+el("photo").onclick=function(event){if(event&&event.stopPropagation)event.stopPropagation();toggleReactions("reactPanel")};
+el("reactPanel").onclick=function(event){if(event&&event.target&&event.target.tagName==="BUTTON")return;toggleReactions("reactPanel")};
+el("viewerReactions").onclick=function(event){if(event&&event.target&&event.target.tagName==="BUTTON")return;toggleReactions("viewerReactions")};
+el("viewer").onclick=function(event){if(!viewerItem||viewerItem.type_media!=="photo")return;var target=event&&event.target;if(target===el("viewer")||target===el("viewerContent"))toggleReactions("viewerReactions")};
+el("homeGallery").onclick=showGallery;
+el("homeSlideshow").onclick=showSlideshow;
+el("openHome").onclick=showHome;
+el("gallerySort").onchange=function(){galleryShown=36;renderGallery()};
+el("favoriteFilter").onclick=function(){galleryFavoritesOnly=!galleryFavoritesOnly;galleryShown=36;renderGallery()};
+el("moreGallery").onclick=function(){galleryShown+=36;renderGallery()};
+el("viewerFavorite").onclick=function(){if(viewerItem)toggleFavorite(viewerItem)};
+el("previous").onclick=function(){changePhoto(-1)};
+el("next").onclick=function(){changePhoto(1)};
+el("openGallery").onclick=showGallery;
+el("closeGallery").onclick=showHome;
+el("closeViewer").onclick=function(){touch();if(activeVideo)activeVideo.pause();activeVideo=null;mode="gallery";visible("viewer",false)};
+el("sleep").onclick=function(){touch();mode="sleep";visible("dark",true)};
+el("dark").onclick=function(){touch();mode="slideshow";visible("dark",false)};
+document.addEventListener("touchstart",touch,false);document.addEventListener("click",touch,false);
+try{var stored=JSON.parse(localStorage.getItem("mamie_session")||"null");if(stored&&stored.access&&stored.refresh){access=stored.access;refresh=stored.refresh;expiry=stored.expiry||0;authReady(function(ok){if(ok)start()})}else visible("login",true)}catch(e){visible("login",true)}
+})();
+</script></body></html>
