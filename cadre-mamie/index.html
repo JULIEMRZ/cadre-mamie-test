@@ -159,11 +159,11 @@ function loadReactions(){request("GET","/rest/v1/reactions_mamie?select=souvenir
 function renderReactionButtons(item,target){
  var panel=el(target);while(panel.firstChild)panel.removeChild(panel.firstChild);
  if(!item)return;
- var choices=[{emoji:"❤️",label:"J'adore"},{emoji:"😂",label:"Rigolo"},{emoji:"😘",label:"Bisous",image:"https://em-content.zobj.net/source/apple/126/face-throwing-a-kiss_1f618.png"}],selected=reactionMap[item.id]||"";
+ var choices=[{emoji:"❤️",label:"J'adore"},{emoji:"😂",label:"Rigolo"},{emoji:"😘",label:"Bisous"}],selected=reactionMap[item.id]||"";
  var row=document.createElement("div");row.className="reactionChoices";
  for(var i=0;i<choices.length;i++){(function(choice){
  var btn=document.createElement("button");btn.type="button";btn.title=choice.label;btn.className=(selected===choice.emoji||(choice.emoji==="😘"&&(selected==="🥰"||selected==="😍")))?"selected":"";
- var symbol=document.createElement("span");symbol.className="reactionEmoji";if(choice.image){var icon=document.createElement("img");icon.src=choice.image;icon.onerror=function(){this.onerror=null;this.src="../assets/bisous.svg"};icon.alt=choice.label;icon.setAttribute("aria-hidden","true");symbol.appendChild(icon)}else symbol.textContent=choice.emoji;
+ var symbol=document.createElement("span");symbol.className="reactionEmoji";symbol.textContent=choice.emoji;
  var caption=document.createElement("span");caption.className="reactionLabel";caption.textContent=choice.label;
  btn.appendChild(symbol);btn.appendChild(caption);
  btn.onclick=function(){touch();saveReaction(item,choice.emoji)};
